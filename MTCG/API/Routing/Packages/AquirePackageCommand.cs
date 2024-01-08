@@ -11,8 +11,8 @@ namespace MTCG.API.Routing.Packages
 {
     internal class AquirePackageCommand : AuthenticatedRouteCommand
     {
-        IPackageManager _packageManager;
-        ICardManager _cardManager;
+        private readonly IPackageManager _packageManager;
+        private readonly ICardManager _cardManager;
         public AquirePackageCommand(IPackageManager packageManager, ICardManager cardManager, User identity) : base(identity)
         {
             _packageManager = packageManager;

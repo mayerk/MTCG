@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +49,14 @@ namespace MTCG.DAL
                 updated = true;
             }
             return updated;
+        }
+        public List<Card> GetDeckByAuthToken(string token) {
+            List<Card> cards = new List<Card>();
+            User? user = GetUserByAuthToken(token);
+            if(user != null) {
+                cards = user.Deck;
+            }
+            return cards;
         }
     }
 }

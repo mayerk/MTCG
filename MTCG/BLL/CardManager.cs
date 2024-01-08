@@ -28,13 +28,16 @@ namespace MTCG.BLL {
             List<Card> cards = _cardDao.GetCardsByPId(pId);
             user.Coins -= 5;
             foreach(Card card in cards) {
-                card.uId = user.Id;
-                card.pId = "";
+                card.UId = user.Id;
+                card.PId = "";
             }
         }
 
         public List<Card> GetAllUsersCards(string uid) {
             return _cardDao.GetAllCardsByUId(uid);
+        }
+        public Card? GetCardById(string id) {
+            return _cardDao.GetCardById(id) ?? throw new CardNotFoundException();
         }
     }
 }

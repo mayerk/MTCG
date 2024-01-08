@@ -14,5 +14,6 @@ namespace MTCG.BLL
         User GetUserByAuthToken(string authToken);
         User GetUserByUsername(string username);
         void UpdateUser(User user);
+        List<Card> GetDeckByAuthToken(string token);
     }
 }

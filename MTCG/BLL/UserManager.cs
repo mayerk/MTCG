@@ -46,5 +46,8 @@ namespace MTCG.BLL
                 throw new UserNotFoundException();
             }
         }
+        public List<Card> GetDeckByAuthToken(string token) {
+            return _userDao.GetDeckByAuthToken(token);
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace MTCG.API.Routing
         {
             var isMatch = (string path) => _routeParser.IsMatch(path, "/users/{id}");
             var isUsername = (string path) => _routeParser.isUsername(path, "/cards/{username}");
+            //var userMatchesToken = (string path, User user) => _identityProvider.ParsedUserMatchesToken(path, user);
             var parseId = (string path) => int.Parse(_routeParser.ParseParameters(path, "/messages/{id}")["id"]);
             var checkBody = (string? payload) => payload ?? throw new InvalidDataException();
 
@@ -45,8 +46,8 @@ namespace MTCG.API.Routing
                 return request switch
                 {
                     { Method: HttpMethod.Post, ResourcePath: "/users" } => new RegisterCommand(_userManager, Deserialize<Credentials>(request.Payload)), 
-                    { Method: HttpMethod.Get, ResourcePath: var path } when isMatch(path) => new UserByUsernameCommand(_userManager, GetIdentity(request)), 
-                    { Method: HttpMethod.Put, ResourcePath: var path } when isMatch(path) => new UpdateUserCommand(_userManager, GetIdentity(request), Deserialize<UserData>(request.Payload)), 
+                    { Method: HttpMethod.Get, ResourcePath: var path } when isMatch(path) => new UserByUsernameCommand(_userManager, ValidateIdentity(request, path)), 
+                    { Method: HttpMethod.Put, ResourcePath: var path } when isMatch(path) => new UpdateUserCommand(_userManager, ValidateIdentity(request, path), Deserialize<UserData>(request.Payload)), 
 
                     { Method: HttpMethod.Post, ResourcePath: "/sessions" } => new LoginCommand(_userManager, Deserialize<Credentials>(request.Payload)), 
                     
@@ -55,7 +56,11 @@ namespace MTCG.API.Routing
                     { Method: HttpMethod.Post, ResourcePath: "/transactions/packages" } => new AquirePackageCommand(_packageManager, _cardManager, GetIdentity(request)),
                     
                     { Method: HttpMethod.Get, ResourcePath: "/cards" } => new ShowUserCardsCommand(_cardManager, GetIdentity(request)),
-
+                    
+                    { Method: HttpMethod.Get, ResourcePath: "/deck" } => new ShowDeckCommand(_userManager, GetIdentity(request)),
+                    { Method: HttpMethod.Put, ResourcePath: "/deck" } => new ChooseDeckCommand(_userManager, _cardManager, DeserializeIDs(request.Payload), GetIdentity(request)), 
+                    
+                    { Method: HttpMethod.Get, ResourcePath: "/stats" } => new ShowUsersStatsCommand(_userManager, GetIdentity(request)),
                     //{ Method: HttpMethod.Get, ResourcePath: var path } when isMatch(path) => new ShowMessageCommand(_messageManager, GetIdentity(request), parseId(path)),
                     //{ Method: HttpMethod.Put, ResourcePath: var path } when isMatch(path) => new UpdateMessageCommand(_messageManager, GetIdentity(request), parseId(path), checkBody(request.Payload)),
                     //{ Method: HttpMethod.Delete, ResourcePath: var path } when isMatch(path) => new RemoveMessageCommand(_messageManager, GetIdentity(request), parseId(path)),
@@ -75,9 +80,18 @@ namespace MTCG.API.Routing
             return data ?? throw new InvalidDataException();
         }
 
+        private List<string> DeserializeIDs(string? body) {
+            var data = body is not null ? JsonConvert.DeserializeObject<List<string>>(body) : null;
+            return data ?? throw new InvalidDataException();
+        }
+
         private User GetIdentity(HttpRequest request)
         {
             return _identityProvider.GetIdentityForRequest(request) ?? throw new RouteNotAuthenticatedException();
+        }
+
+        private User ValidateIdentity(HttpRequest request, string path) {
+            return _identityProvider.ValidateIdentity(request, path) ?? throw new RouteNotAuthenticatedException();
         }
     }
 }

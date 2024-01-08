@@ -10,5 +10,6 @@ namespace MTCG.BLL {
         void CreateCard(Card card);
         void AquirePackage(User user, string pId);
         List<Card> GetAllUsersCards(string uid);
+        Card? GetCardById(string id);
     }
 }

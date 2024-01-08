@@ -14,7 +14,7 @@ namespace MTCG.Models {
             Id = Guid.NewGuid().ToString();
             this.cards = cards;
             foreach (Card card in cards) {
-                card.pId = Id;
+                card.PId = Id;
             }
         }
     }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.DAL
 {
-    internal class DatabaseUserDao : IUserDao
+    internal class DatabaseUserDao
     {
         private const string CreateUserTableCommand = @"CREATE TABLE IF NOT EXISTS users (username varchar PRIMARY KEY, password varchar);";
         private const string SelectAllUsersCommand = @"SELECT username, password FROM users";

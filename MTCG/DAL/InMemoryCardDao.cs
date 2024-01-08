@@ -25,11 +25,11 @@ namespace MTCG.DAL {
         }
 
         public List<Card> GetCardsByPId(string pId) {
-            return _cards.FindAll(u => u.pId == pId);
+            return _cards.FindAll(u => u.PId == pId);
         }
 
         public List<Card> GetAllCardsByUId(string uid) {
-            return _cards.FindAll(u => u.uId == uid);
+            return _cards.FindAll(u => u.UId == uid);
         }
     }
 }

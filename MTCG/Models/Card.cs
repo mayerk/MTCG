@@ -11,9 +11,9 @@ namespace MTCG.Models {
         public string Name { get; set; }
         public double Damage { get; }
         [JsonIgnore]
-        public string uId { get; set; } = "";
+        public string UId { get; set; } = "";
         [JsonIgnore]
-        public string pId { get; set; } = "";
+        public string PId { get; set; } = "";
         [JsonIgnore]
         public CardSpecification CardSpecification = new();
 
