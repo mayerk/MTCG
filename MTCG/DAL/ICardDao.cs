@@ -11,6 +11,6 @@ namespace MTCG.DAL {
         bool CreateCard(Card card);
         Card? GetCardById(string id);
         List<Card> GetCardsByPId(string pId);
-        List<Card> GetAll(string uid);
+        List<Card> GetAllCardsByUId(string uid);
     }
 }

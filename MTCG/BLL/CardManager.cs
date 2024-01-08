@@ -33,8 +33,8 @@ namespace MTCG.BLL {
             }
         }
 
-        public List<Card> GetAllCards(string uid) {
-            return _cardDao.GetAll(uid);
+        public List<Card> GetAllUsersCards(string uid) {
+            return _cardDao.GetAllCardsByUId(uid);
         }
     }
 }

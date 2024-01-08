@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
@@ -9,9 +10,11 @@ namespace MTCG.Models {
         public string Id { get; set; }
         public string Name { get; set; }
         public double Damage { get; }
+        [JsonIgnore]
         public string uId { get; set; } = "";
+        [JsonIgnore]
         public string pId { get; set; } = "";
-
+        [JsonIgnore]
         public CardSpecification CardSpecification = new();
 
         public Card(string id, string name, double damage) { 

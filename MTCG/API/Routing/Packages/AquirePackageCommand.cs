@@ -21,10 +21,9 @@ namespace MTCG.API.Routing.Packages
         public override HttpResponse Execute()
         {
             HttpResponse response;
-            Package? package;
 
             try {
-                package = _packageManager.GetFirstPackage();
+                Package? package = _packageManager.GetFirstPackage();
                 _cardManager.AquirePackage(Identity, package.Id);
                 _packageManager.DeletePackage(package.Id);
                 response = new HttpResponse(StatusCode.Ok);

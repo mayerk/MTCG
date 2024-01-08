@@ -9,6 +9,6 @@ namespace MTCG.BLL {
     internal interface ICardManager {
         void CreateCard(Card card);
         void AquirePackage(User user, string pId);
-        List<Card> GetAllCards(string uid);
+        List<Card> GetAllUsersCards(string uid);
     }
 }

@@ -138,6 +138,7 @@ namespace MTCG.HttpServer
                 writer.Write($"Content-Length: {payload.Length}\r\n");
                 writer.Write("\r\n");
                 writer.Write(Encoding.UTF8.GetString(payload));
+                writer.Write("\n");
             }
             else
             {

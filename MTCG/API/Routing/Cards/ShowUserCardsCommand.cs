@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MTCG.API.Routing.Cards {
@@ -18,7 +19,7 @@ namespace MTCG.API.Routing.Cards {
 
         public override HttpResponse Execute() {
             HttpResponse response;
-            List<Card> cards = _cardManager.GetAllCards(Identity.Id);
+            List<Card> cards = _cardManager.GetAllUsersCards(Identity.Id);
             if(!cards.Any()) {
                 response = new HttpResponse(StatusCode.NoContent);
                 return response;

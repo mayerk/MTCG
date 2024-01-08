@@ -28,7 +28,7 @@ namespace MTCG.DAL {
             return _cards.FindAll(u => u.pId == pId);
         }
 
-        public List<Card> GetAll(string uid) {
+        public List<Card> GetAllCardsByUId(string uid) {
             return _cards.FindAll(u => u.uId == uid);
         }
     }
