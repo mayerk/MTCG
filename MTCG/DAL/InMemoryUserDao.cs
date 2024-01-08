@@ -42,7 +42,7 @@ namespace MTCG.DAL
         public bool UpdateUser(User user) {
             bool updated = false;
 
-            User? tmp = _users.SingleOrDefault(u => u.Username == user.Username);
+            User? tmp = GetUserByUsername(user.Username);
             if (tmp != null) {
                 tmp.UserData = user.UserData;
                 updated = true;

@@ -13,7 +13,6 @@ namespace MTCG.DAL
         User? GetUserByCredentials(string username, string password);
         bool InsertUser(User user);
         User? GetUserByUsername(string username);
-
         bool UpdateUser(User user);
     }
 }

@@ -11,26 +11,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HttpMethod = MTCG.HttpServer.Request.HttpMethod;
+using MTCG.API.Routing.Cards;
+using MTCG.API.Routing.Packages;
 
 namespace MTCG.API.Routing
 {
     internal class MTCGRouter : IRouter
     {
         private readonly IUserManager _userManager;
+        private readonly ICardManager _cardManager;
+        private readonly IPackageManager _packageManager;
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
 
-        public MTCGRouter(IUserManager userManager)
+        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager)
         {
             _userManager = userManager;
+            _cardManager = cardManager;
+            _packageManager = packageManager;
             _identityProvider = new IdentityProvider(userManager);
             _routeParser = new IdRouteParser();
         }
 
         public IRouteCommand? Resolve(HttpRequest request)
         {
-            var isMatch = (string path) => _routeParser.IsMatch(path, "/messages/{id}");
-            var isUsername = (string path) => _routeParser.isUsername(path, "users/{username}");
+            var isMatch = (string path) => _routeParser.IsMatch(path, "/users/{id}");
+            var isUsername = (string path) => _routeParser.isUsername(path, "/cards/{username}");
             var parseId = (string path) => int.Parse(_routeParser.ParseParameters(path, "/messages/{id}")["id"]);
             var checkBody = (string? payload) => payload ?? throw new InvalidDataException();
 
@@ -39,13 +45,16 @@ namespace MTCG.API.Routing
                 return request switch
                 {
                     { Method: HttpMethod.Post, ResourcePath: "/users" } => new RegisterCommand(_userManager, Deserialize<Credentials>(request.Payload)), 
-                    { Method: HttpMethod.Get, ResourcePath: var path } when isUsername(path) => new UserByUsernameCommand(_userManager, GetIdentity(request)), 
-                    { Method: HttpMethod.Put, ResourcePath: var path } when isUsername(path) => new UpdateUserCommand(_userManager, GetIdentity(request), Deserialize<UserData>(request.Payload)), 
+                    { Method: HttpMethod.Get, ResourcePath: var path } when isMatch(path) => new UserByUsernameCommand(_userManager, GetIdentity(request)), 
+                    { Method: HttpMethod.Put, ResourcePath: var path } when isMatch(path) => new UpdateUserCommand(_userManager, GetIdentity(request), Deserialize<UserData>(request.Payload)), 
 
-                    { Method: HttpMethod.Post, ResourcePath: "/sessions" } => new LoginCommand(_userManager, Deserialize<Credentials>(request.Payload)),
+                    { Method: HttpMethod.Post, ResourcePath: "/sessions" } => new LoginCommand(_userManager, Deserialize<Credentials>(request.Payload)), 
+                    
+                    { Method: HttpMethod.Post, ResourcePath: "/packages" } => new CreatePackageCommand(_packageManager, _cardManager, Deserialize<Card[]>(request.Payload), GetIdentity(request)),
 
-                    //{ Method: HttpMethod.Post, ResourcePath: "/messages" } => new AddMessageCommand(_messageManager, GetIdentity(request), checkBody(request.Payload)),
-                    //{ Method: HttpMethod.Get, ResourcePath: "/messages" } => new ListMessagesCommand(_messageManager, GetIdentity(request)),
+                    { Method: HttpMethod.Post, ResourcePath: "/transactions/packages" } => new AquirePackageCommand(_packageManager, _cardManager, GetIdentity(request)),
+                    
+                    { Method: HttpMethod.Get, ResourcePath: "/cards" } => new ShowUserCardsCommand(_cardManager, GetIdentity(request)),
 
                     //{ Method: HttpMethod.Get, ResourcePath: var path } when isMatch(path) => new ShowMessageCommand(_messageManager, GetIdentity(request), parseId(path)),
                     //{ Method: HttpMethod.Put, ResourcePath: var path } when isMatch(path) => new UpdateMessageCommand(_messageManager, GetIdentity(request), parseId(path), checkBody(request.Payload)),

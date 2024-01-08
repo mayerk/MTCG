@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.API.Routing
 {
-    internal abstract class AuthenticatedRouteCommand : IRouteCommand
+    internal abstract class AuthenticatedRouteCommand: IRouteCommand
     {
         public User Identity { get; init; }
 
