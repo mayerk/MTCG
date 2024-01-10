@@ -24,6 +24,7 @@ namespace MTCG.DAL
 
         private readonly string _connectionString;
 
+
         public DatabaseUserDao(string connectionString)
         {
             _connectionString = connectionString;
