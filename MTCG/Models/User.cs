@@ -1,4 +1,6 @@
-﻿namespace MTCG.Models
+﻿using System.Text.Json.Serialization;
+
+namespace MTCG.Models
 {
     internal class User
     {
@@ -13,12 +15,28 @@
         public int Wins { get; set; } = 0;
         public int Losses { get; set; } = 0;
 
+        public User(string username) {
+            Username = username;
+        }
+
+        [JsonConstructor]
         public User(string username, string password, UserData userdata)
         {
             Id = Guid.NewGuid().ToString();
             Username = username;
             Password = password;
             UserData = userdata;
+        }
+    
+        public User(string id, string username, string password, int coins, UserData userData, int elo, int wins, int losses) {
+            Id = Guid.NewGuid().ToString();
+            Username = username;
+            Password = password;
+            Coins = coins;
+            UserData = userData;
+            Elo = elo;
+            Wins = wins;
+            Losses = losses;
         }
     }
 }

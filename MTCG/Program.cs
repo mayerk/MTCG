@@ -14,13 +14,13 @@ namespace MTCG
             // Careful: right now, this program will not do anything due to the null-conditional operators (but it will not crash either)
             // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#null-conditional-operators--and-
 
-            var connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=postgres";
+            var connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=mtcg";
 
             //IMessageDao messageDao = new InMemoryMessageDao();
-            IUserDao userDao = new InMemoryUserDao();
+            //IUserDao userDao = new InMemoryUserDao();
             ICardDao cardDao = new InMemoryCardDao();
             IPackageDao packageDao = new InMemoryPackageDao();
-            //IUserDao userDao = new DatabaseUserDao(connectionString);
+            IUserDao userDao = new DatabaseUserDao(connectionString);
 
             IUserManager userManager = new UserManager(userDao);
             ICardManager cardManager = new CardManager(cardDao);

@@ -20,6 +20,7 @@ namespace MTCG.API.Routing.Users {
 
         public override HttpResponse Execute() {
             User? user;
+
             try {
                 user = _userManager.GetUserByUsername(Identity.Username);
             } catch (UserNotFoundException) {
@@ -28,7 +29,7 @@ namespace MTCG.API.Routing.Users {
 
             HttpResponse response;
             if (user == null) {
-                response = new HttpResponse(StatusCode.Unauthorized);
+                response = new HttpResponse(StatusCode.NotFound);
             } else {
                 response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(user.UserData));
             }

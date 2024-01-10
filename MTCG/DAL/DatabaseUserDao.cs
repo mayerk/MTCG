@@ -7,15 +7,20 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using MTCG.BLL;
+using System.Data.Common;
 
 namespace MTCG.DAL
 {
-    internal class DatabaseUserDao
+    internal class DatabaseUserDao: IUserDao
     {
-        private const string CreateUserTableCommand = @"CREATE TABLE IF NOT EXISTS users (username varchar PRIMARY KEY, password varchar);";
+        private const string DeleteTableEntriesCommand = @"DELETE from users";
+        private const string CreateUserTableCommand = @"CREATE TABLE IF NOT EXISTS users (id varchar NOT NULL, name varchar NOT NULL, password varchar, displayname varchar NOT NULL, coins integer default 20, bio varchar, image varchar, elo integer default 100, wins integer default 0, losses integer default 0, PRIMARY KEY (id));";
         private const string SelectAllUsersCommand = @"SELECT username, password FROM users";
-        private const string SelectUserByCredentialsCommand = "SELECT username, password FROM users WHERE username=@username AND password=@password";
-        private const string InsertUserCommand = @"INSERT INTO users(username, password) VALUES (@username, @password)";
+        private const string SelectUserByUsernameCommand = @"SELECT * from users WHERE name=@username";
+        private const string SelectUserByCredentialsCommand = @"SELECT * from users WHERE name=@username AND password=@password";
+        private const string InsertUserCommand = @"INSERT INTO users(id, name, password, displayname, bio, image) VALUES (@id, @name, @pwd, @displayname, @bio, @image)";
+        private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, bio=@bio, image=@image WHERE name=@username";
 
         private readonly string _connectionString;
 
@@ -23,6 +28,10 @@ namespace MTCG.DAL
         {
             _connectionString = connectionString;
             EnsureTables();
+        }
+
+        public List<Card> GetDeckByAuthToken(string token) {
+            throw new NotImplementedException();
         }
 
         public User? GetUserByAuthToken(string authToken)
@@ -33,10 +42,9 @@ namespace MTCG.DAL
         public User? GetUserByCredentials(string username, string password)
         {
             // TODO: handle exceptions
-            User? user = null;
-
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
+            User? user = null;
 
             using var cmd = new NpgsqlCommand(SelectUserByCredentialsCommand, connection);
             cmd.Parameters.AddWithValue("username", username);
@@ -53,25 +61,60 @@ namespace MTCG.DAL
         }
 
         public User? GetUserByUsername(string username) {
-            throw new NotImplementedException();
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            User? user = null;
+
+            using var cmd = new NpgsqlCommand(SelectUserByUsernameCommand, connection);
+            cmd.Parameters.AddWithValue("username", username);
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read()) {
+                user = ReadUser(reader);
+            }
+            return user;
         }
 
         public bool InsertUser(User user)
         {
-            // TODO: handle exceptions
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
+            // TODO: handle exceptions
+
+            User? tmp = GetUserByUsername(user.Username);
+            if(tmp != null) {
+                throw new DuplicateUserException();
+            }
 
             using var cmd = new NpgsqlCommand(InsertUserCommand, connection);
-            cmd.Parameters.AddWithValue("username", user.Username);
-            cmd.Parameters.AddWithValue("password", user.Password);
+            cmd.Parameters.AddWithValue("id", user.Id);
+            cmd.Parameters.AddWithValue("name", user.Username);
+            cmd.Parameters.AddWithValue("pwd", user.Password);
+            cmd.Parameters.AddWithValue("displayname", user.Username);
+            cmd.Parameters.AddWithValue("bio", user.UserData.Bio);
+            cmd.Parameters.AddWithValue("image", user.UserData.Image);
             var affectedRows = cmd.ExecuteNonQuery();
 
             return affectedRows > 0;
         }
 
         public bool UpdateUser(User user) {
-            throw new NotImplementedException();
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            User? tmp = GetUserByUsername(user.Username);
+
+            if(tmp == null) {
+                return false;
+            }
+            tmp.UserData = user.UserData;
+
+            using var cmd = new NpgsqlCommand(UpdateUserCommand, connection);
+            cmd.Parameters.AddWithValue("displayname", tmp.Username);
+            cmd.Parameters.AddWithValue("bio", tmp.UserData.Bio);
+            cmd.Parameters.AddWithValue("image", tmp.UserData.Image);
+            cmd.Parameters.AddWithValue("username", tmp.Username);
+            var affectedRows = cmd.ExecuteNonQuery();
+
+            return affectedRows > 0;
         }
 
         private void EnsureTables()
@@ -81,6 +124,8 @@ namespace MTCG.DAL
             connection.Open();
             using var cmd = new NpgsqlCommand(CreateUserTableCommand, connection);
             cmd.ExecuteNonQuery();
+            using var cmd2 = new NpgsqlCommand(DeleteTableEntriesCommand, connection);
+            cmd2.ExecuteNonQuery();
         }
 
         private IEnumerable<User> GetAllUsers() 
@@ -104,11 +149,19 @@ namespace MTCG.DAL
 
         private User ReadUser(IDataRecord record)
         {
-            var username = Convert.ToString(record["username"])!;
+            var id = Convert.ToString(record["id"])!;
+            var username = Convert.ToString(record["name"])!;
             var password = Convert.ToString(record["password"])!;
-            UserData userData = new(username, "", "");
+            var displayname = Convert.ToString(record["displayname"])!;
+            var coins = Convert.ToInt16(record["coins"])!;
+            var bio = Convert.ToString(record["bio"])!;
+            var image = Convert.ToString(record["image"])!;
+            var elo = Convert.ToInt16(record["elo"])!;
+            var wins = Convert.ToInt16(record["wins"])!;
+            var losses = Convert.ToInt16(record["losses"])!;
+            UserData userData = new(displayname, bio, image);
 
-            return new User(username, password, userData);
+            return new User(id, username, password, coins, userData, elo, wins, losses);
         }
     }
 }

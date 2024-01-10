@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using HttpMethod = MTCG.HttpServer.Request.HttpMethod;
 using MTCG.API.Routing.Cards;
 using MTCG.API.Routing.Packages;
+using System.Reflection;
 
 namespace MTCG.API.Routing
 {
@@ -92,6 +93,10 @@ namespace MTCG.API.Routing
 
         private User ValidateIdentity(HttpRequest request, string path) {
             return _identityProvider.ValidateIdentity(request, path) ?? throw new RouteNotAuthenticatedException();
+        }
+
+        private string GetUsernameFromPath(string path) {
+            return path.Substring(path.LastIndexOf("/") + 1);
         }
     }
 }

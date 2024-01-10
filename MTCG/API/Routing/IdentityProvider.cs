@@ -31,7 +31,9 @@ namespace MTCG.API.Routing
                 {
                     try
                     {
-                        currentUser = _userManager.GetUserByAuthToken(authToken.Substring(prefix.Length));
+                        int index = authToken.Substring(prefix.Length).IndexOf("-", StringComparison.Ordinal);
+                        string username = authToken.Substring(prefix.Length).Substring(0, index);
+                        currentUser = _userManager.GetUserByUsername(username);
                     }
                     catch { }
                 }
@@ -40,15 +42,22 @@ namespace MTCG.API.Routing
             return currentUser;
         }
 
-        public User ValidateIdentity(HttpRequest request, string path) {
-            User? currentUser = GetIdentityForRequest(request);
-
-            int index = path.LastIndexOf('/');
-            string username = path.Substring(index + 1);
-            if(currentUser != null && username != currentUser.Username) {
-                currentUser = null;
+        public User? ValidateIdentity(HttpRequest request, string path) {
+            User? user = GetIdentityForRequest(request);
+            if (user != null) {
+                string queueUsername = GetParameterFromRequest(path);
+                if(user.Username ==  queueUsername || user.Username == "admin") {
+                    user = new(queueUsername);
+                } else {
+                    user = null;
+                }
             }
-            return currentUser;
+            return user;
+        }
+
+        private string GetParameterFromRequest(string path) {
+            int index = path.LastIndexOf("/");
+            return path.Substring(index + 1);
         }
     }
 }
