@@ -15,7 +15,7 @@ namespace MTCG.BLL {
         }
         public void CreatePackage(Card[] cards) {
             Package package = new(cards);
-            _packageDao.CreatePackage(package);
+            _packageDao.InsertPackage(package);
         }
         public Package GetFirstPackage() {
             return _packageDao.GetFirstPackage() ?? throw new NoPackageAvailableException();

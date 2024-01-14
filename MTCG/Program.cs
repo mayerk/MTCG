@@ -18,9 +18,9 @@ namespace MTCG
 
             //IMessageDao messageDao = new InMemoryMessageDao();
             //IUserDao userDao = new InMemoryUserDao();
-            ICardDao cardDao = new InMemoryCardDao();
-            IPackageDao packageDao = new InMemoryPackageDao();
             IUserDao userDao = new DatabaseUserDao(connectionString);
+            ICardDao cardDao = new DatabaseCardDao(connectionString);
+            IPackageDao packageDao = new DatabasePackageDao(connectionString);
 
             IUserManager userManager = new UserManager(userDao);
             ICardManager cardManager = new CardManager(cardDao);

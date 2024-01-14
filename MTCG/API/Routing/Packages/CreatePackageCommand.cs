@@ -22,7 +22,6 @@ namespace MTCG.API.Routing.Packages
             _packageManager = packageManager;
             _cardManager = cardManager;
             _cards = cards;
-            //_cards = new List<Card>(cards);
         }
         public override HttpResponse Execute()
         {

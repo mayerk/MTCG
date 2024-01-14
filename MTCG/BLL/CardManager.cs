@@ -16,7 +16,7 @@ namespace MTCG.BLL {
         }
 
         public void CreateCard(Card card) {
-            if(_cardDao.CreateCard(card) == false) {
+            if(_cardDao.InsertCard(card) == false) {
                 throw new DuplicateCardException();
             }
         }
@@ -25,12 +25,11 @@ namespace MTCG.BLL {
             if(user.Coins < 5) {
                 throw new NotEnoughCoinsException();
             }
-            List<Card> cards = _cardDao.GetCardsByPId(pId);
+            /*List<Card> cards = _cardDao.GetCardsByPId(pId);
             user.Coins -= 5;
             foreach(Card card in cards) {
                 card.UId = user.Id;
-                card.PId = "";
-            }
+            }*/
         }
 
         public List<Card> GetAllUsersCards(string uid) {

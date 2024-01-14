@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 namespace MTCG.DAL {
     internal interface ICardDao {
 
-        bool CreateCard(Card card);
+        bool InsertCard(Card card);
         Card? GetCardById(string id);
-        List<Card> GetCardsByPId(string pId);
         List<Card> GetAllCardsByUId(string uid);
     }
 }

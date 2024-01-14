@@ -10,7 +10,7 @@ namespace MTCG.DAL {
 
         private readonly List<Card> _cards = new();
 
-        public bool CreateCard(Card card) {
+        public bool InsertCard(Card card) {
             bool inserted = false;
 
             if (GetCardById(card.Id) == null) {
@@ -22,10 +22,6 @@ namespace MTCG.DAL {
 
         public Card? GetCardById(string id) {
             return _cards.SingleOrDefault(u => u.Id == id);
-        }
-
-        public List<Card> GetCardsByPId(string pId) {
-            return _cards.FindAll(u => u.PId == pId);
         }
 
         public List<Card> GetAllCardsByUId(string uid) {

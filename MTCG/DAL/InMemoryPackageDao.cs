@@ -9,8 +9,9 @@ namespace MTCG.DAL {
     internal class InMemoryPackageDao: IPackageDao {
         private readonly List<Package> _packages = new();
 
-        public void CreatePackage(Package package) {
+        public bool InsertPackage(Package package) {
             _packages.Add(package);
+            return true;
         }
         public Package? GetFirstPackage() {
             return _packages.FirstOrDefault();
@@ -23,6 +24,10 @@ namespace MTCG.DAL {
             if (package != null) {
                 _packages.Remove(package);
             }
+        }
+
+        public List<Package> GetPackagesByPId(string pid) {
+            throw new NotImplementedException();
         }
     }
 }

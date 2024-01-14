@@ -13,11 +13,17 @@ namespace MTCG.Models {
         [JsonIgnore]
         public string UId { get; set; } = "";
         [JsonIgnore]
-        public string PId { get; set; } = "";
-        [JsonIgnore]
         public CardSpecification CardSpecification = new();
 
+        [JsonConstructor]
         public Card(string id, string name, double damage) { 
+            Id = id;
+            Name = name;
+            Damage = damage;
+            CardSpecification.Fill(name);
+        }
+
+        public Card(string id, string name, double damage, string uid) {
             Id = id;
             Name = name;
             Damage = damage;

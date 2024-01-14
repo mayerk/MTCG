@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace MTCG.DAL {
     internal interface IPackageDao {
-        void CreatePackage(Package package);
+        bool InsertPackage(Package package);
         Package? GetFirstPackage();
         Package? GetPackageById(string id);
+
+        List<Package> GetPackagesByPId(string pid);
         void DeletePackage(string pid);
     }
 }
