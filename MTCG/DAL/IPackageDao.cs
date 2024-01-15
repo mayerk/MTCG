@@ -12,6 +12,6 @@ namespace MTCG.DAL {
         Package? GetPackageById(string id);
 
         List<Package> GetPackagesByPId(string pid);
-        void DeletePackage(string pid);
+        bool DeletePackage(string pid);
     }
 }

@@ -47,7 +47,8 @@ namespace MTCG.API.Routing
             if (user != null) {
                 string queueUsername = GetParameterFromRequest(path);
                 if(user.Username ==  queueUsername || user.Username == "admin") {
-                    user = new(queueUsername);
+                    //user = new(queueUsername);
+                    user = _userManager.GetUserByUsername(queueUsername);
                 } else {
                     user = null;
                 }

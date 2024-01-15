@@ -17,8 +17,9 @@ namespace MTCG.DAL {
         private readonly string DeleteTableEntriesCommand = @"DELETE from packages";
         private readonly string InsertPackageCommand = @"INSERT INTO packages (id, pid, cid) VALUES (@id, @pid, @cid);";
         private readonly string GetPackageByIdCommand = @"SELECT * from packages WHERE id=@id;";
-        private readonly string GetFirstPackageCommand = @"SELECT * from packages min(number);";
+        private readonly string GetFirstPackageCommand = @"SELECT * from packages WHERE number = (SELECT min(number) from packages);";
         private readonly string GetPackagesByPIdCommand = @"SELECT * from packages WHERE pid=@pid;";
+        private readonly string DeletePackageByPIdCommand = @"DELETE from packages WHERE pid=@pid;";
 
         public DatabasePackageDao(string connectionString) {
             _connectionString = connectionString;
@@ -53,8 +54,13 @@ namespace MTCG.DAL {
             return inserted;
         }
 
-        public void DeletePackage(string pid) {
-            throw new NotImplementedException();
+        public bool DeletePackage(string pid) {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(DeletePackageByPIdCommand, connection);
+            cmd.Parameters.AddWithValue("pid", pid);
+            var affectedRows = cmd.ExecuteNonQuery();
+            return affectedRows > 0;
         }
 
         public Package? GetFirstPackage() {
@@ -66,11 +72,6 @@ namespace MTCG.DAL {
             using var reader = cmd.ExecuteReader();
             if(reader.Read()) {
                 package = ReadPackage(reader);
-            }
-            
-            if(package != null) {
-                List<Package> tmp = GetPackagesByPId(package.PId);
-                
             }
             return package;
         }
@@ -104,7 +105,7 @@ namespace MTCG.DAL {
             return packages;
         }
 
-        private Package ReadPackage(IDataReader record) {
+        private Package ReadPackage(IDataRecord record) {
             var id = Convert.ToString(record["id"]);
             var pid = Convert.ToString(record["pid"]);
             var cid = Convert.ToString(record["cid"]);

@@ -14,10 +14,12 @@ namespace MTCG.DAL {
 
         private readonly string _connectionString;
 
-        private readonly string CreateCardTableCommand = @"CREATE TABLE IF NOT EXISTS cards(id varchar NOT NULL, name varchar NOT NULL, damage numeric, uid varchar default '', PRIMARY KEY(id));";
+        private readonly string CreateCardTableCommand = @"CREATE TABLE IF NOT EXISTS cards(id varchar NOT NULL, name varchar NOT NULL, damage numeric(6,2), uid varchar default '', PRIMARY KEY(id));";
         private readonly string DeleteTableEntriesCommand = @"DELETE from cards";
         private readonly string CreateCardCommand = @"INSERT INTO cards(id, name, damage) VALUES (@id, @name, @damage);";
         private readonly string GetCardByIdCommand = @"SELECT * from cards WHERE id=@id;";
+        private readonly string UpdateCardUIdCommand = @"UPDATE cards SET uid=@uid WHERE id=@id;";
+        private readonly string GetAllUsersCardsCommand = @"SELECT * from cards WHERE uid=@uid;";
 
         public DatabaseCardDao(string connectionString) {
             _connectionString = connectionString;
@@ -49,7 +51,18 @@ namespace MTCG.DAL {
         }
 
         public List<Card> GetAllCardsByUId(string uid) {
-            throw new NotImplementedException();
+            List<Card> cards = new List<Card>();
+
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(GetAllUsersCardsCommand, connection);
+            cmd.Parameters.AddWithValue("uid", uid);
+            using var reader = cmd.ExecuteReader();
+
+            while(reader.Read()) {
+                cards.Add(ReadCard(reader));
+            }
+            return cards;
         }
 
         public Card? GetCardById(string id) {
@@ -66,8 +79,15 @@ namespace MTCG.DAL {
             return card;
         }
 
-        public List<Card> GetCardsByPId(string pId) {
-            throw new NotImplementedException();
+        public bool UpdateCardUId(Card card) {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(UpdateCardUIdCommand, connection);
+            cmd.Parameters.AddWithValue("uid", card.UId);
+            cmd.Parameters.AddWithValue ("id", card.Id);
+            var affectedRows = cmd.ExecuteNonQuery();
+
+            return affectedRows > 0;
         }
 
         private Card ReadCard(IDataRecord record) {

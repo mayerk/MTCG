@@ -19,11 +19,12 @@ namespace MTCG.DAL {
         public Package? GetPackageById(string id) {
             return _packages.FirstOrDefault(p => p.Id == id);
         }
-        public void DeletePackage(string pid) {
+        public bool DeletePackage(string pid) {
             Package? package = GetPackageById(pid);
             if (package != null) {
                 _packages.Remove(package);
             }
+            return true;
         }
 
         public List<Package> GetPackagesByPId(string pid) {

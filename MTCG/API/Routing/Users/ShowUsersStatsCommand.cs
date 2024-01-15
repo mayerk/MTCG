@@ -17,7 +17,7 @@ namespace MTCG.API.Routing.Users
         public override HttpResponse Execute() {
             HttpResponse response;
             User user = _userManager.GetUserByUsername(Identity.Username);
-            UserStats stats = new(user.Username, user.Elo, user.Wins, user.Losses);
+            UserStats stats = new(user.UserData.Displayname, user.Elo, user.Wins, user.Losses);
             response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(stats));
             return response;
         }

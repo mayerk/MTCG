@@ -18,10 +18,25 @@ namespace MTCG.BLL {
             _packageDao.InsertPackage(package);
         }
         public Package GetFirstPackage() {
-            return _packageDao.GetFirstPackage() ?? throw new NoPackageAvailableException();
+            Package? package = _packageDao.GetFirstPackage();
+            int i = 0;
+            if (package == null) {
+                throw new NoPackageAvailableException();
+            }
+            List<Package> packages = _packageDao.GetPackagesByPId(package.PId);
+            foreach (Package p in packages) {
+                package.Cards[i] = new(p.tmpCId);
+                ++i;
+            }
+            return package;
         }
         public void DeletePackage(string pid) {
             _packageDao.DeletePackage(pid);
+        }
+
+        public Package? GetPackageById(string id) {
+            List<Package> packages = _packageDao.GetPackagesByPId(id);
+            return null;
         }
     }
 }

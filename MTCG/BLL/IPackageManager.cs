@@ -10,5 +10,7 @@ namespace MTCG.BLL {
         void CreatePackage(Card[] cards);
         Package GetFirstPackage();
         void DeletePackage(string pid);
+
+        Package? GetPackageById(string id);
     }
 }

@@ -58,5 +58,13 @@ namespace MTCG.DAL
             }
             return cards;
         }
+
+        public bool UpdateUserCoins(User user) {
+            throw new NotImplementedException();
+        }
+
+        public List<User> GetScoreboard() {
+            throw new NotImplementedException();
+        }
     }
 }

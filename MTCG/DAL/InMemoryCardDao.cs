@@ -27,5 +27,9 @@ namespace MTCG.DAL {
         public List<Card> GetAllCardsByUId(string uid) {
             return _cards.FindAll(u => u.UId == uid);
         }
+
+        public bool UpdateCardUId(Card card) {
+            throw new NotImplementedException();
+        }
     }
 }

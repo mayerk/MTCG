@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 namespace MTCG.BLL {
     internal interface ICardManager {
         void CreateCard(Card card);
-        void AquirePackage(User user, string pId);
+        void AquirePackage(User user, Package package);
         List<Card> GetAllUsersCards(string uid);
         Card? GetCardById(string id);
+        List<Card> GetAllCardsByPId(string pid);
+
+        void FillCardsInPackage(Package package);
     }
 }

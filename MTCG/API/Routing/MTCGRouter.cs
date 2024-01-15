@@ -54,17 +54,16 @@ namespace MTCG.API.Routing
                     
                     { Method: HttpMethod.Post, ResourcePath: "/packages" } => new CreatePackageCommand(_packageManager, _cardManager, Deserialize<Card[]>(request.Payload), GetIdentity(request)),
 
-                    { Method: HttpMethod.Post, ResourcePath: "/transactions/packages" } => new AquirePackageCommand(_packageManager, _cardManager, GetIdentity(request)),
+                    { Method: HttpMethod.Post, ResourcePath: "/transactions/packages" } => new AquirePackageCommand(_packageManager, _cardManager, _userManager, GetIdentity(request)),
                     
                     { Method: HttpMethod.Get, ResourcePath: "/cards" } => new ShowUserCardsCommand(_cardManager, GetIdentity(request)),
                     
                     { Method: HttpMethod.Get, ResourcePath: "/deck" } => new ShowDeckCommand(_userManager, GetIdentity(request)),
                     { Method: HttpMethod.Put, ResourcePath: "/deck" } => new ChooseDeckCommand(_userManager, _cardManager, DeserializeIDs(request.Payload), GetIdentity(request)), 
                     
-                    { Method: HttpMethod.Get, ResourcePath: "/stats" } => new ShowUsersStatsCommand(_userManager, GetIdentity(request)),
-                    //{ Method: HttpMethod.Get, ResourcePath: var path } when isMatch(path) => new ShowMessageCommand(_messageManager, GetIdentity(request), parseId(path)),
-                    //{ Method: HttpMethod.Put, ResourcePath: var path } when isMatch(path) => new UpdateMessageCommand(_messageManager, GetIdentity(request), parseId(path), checkBody(request.Payload)),
-                    //{ Method: HttpMethod.Delete, ResourcePath: var path } when isMatch(path) => new RemoveMessageCommand(_messageManager, GetIdentity(request), parseId(path)),
+                    { Method: HttpMethod.Get, ResourcePath: "/stats" } => new ShowUsersStatsCommand(_userManager, GetIdentity(request)), 
+                    
+                    { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreBoardCommand(_userManager, GetIdentity(request)),
 
                     _ => null
                 };

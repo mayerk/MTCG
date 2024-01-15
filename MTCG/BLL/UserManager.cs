@@ -46,8 +46,18 @@ namespace MTCG.BLL
                 throw new UserNotFoundException();
             }
         }
+
+        public void UpdateUserCoins(User user) {
+            if(!_userDao.UpdateUserCoins(user)) {
+                throw new UserNotFoundException();
+            }
+        }
         public List<Card> GetDeckByAuthToken(string token) {
             return _userDao.GetDeckByAuthToken(token);
+        }
+
+        public List<User> GetScoreboard() {
+            return _userDao.GetScoreboard();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace MTCG.Models {
         public string Id;
         public string PId;
         public Card[] Cards = new Card[5];
-        public string tmpCardId = "";
+        public string tmpCId = "";
 
         public Package(Card[] cards) {
             Id = Guid.NewGuid().ToString();
@@ -18,10 +18,10 @@ namespace MTCG.Models {
             Cards = cards;
         }
 
-        public Package(string id, string pid, string tmpCardId) {
+        public Package(string id, string pid, string cid) {
             Id = id;
             PId = pid;
-            this.tmpCardId = tmpCardId;
+            tmpCId = cid;
         }
     }
 }

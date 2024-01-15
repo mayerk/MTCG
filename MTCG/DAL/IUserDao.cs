@@ -14,6 +14,8 @@ namespace MTCG.DAL
         bool InsertUser(User user);
         User? GetUserByUsername(string username);
         bool UpdateUser(User user);
+        bool UpdateUserCoins(User user);
         List<Card> GetDeckByAuthToken(string token);
+        List<User> GetScoreboard();
     }
 }

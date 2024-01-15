@@ -17,10 +17,12 @@ namespace MTCG.DAL
         private const string DeleteTableEntriesCommand = @"DELETE from users";
         private const string CreateUserTableCommand = @"CREATE TABLE IF NOT EXISTS users (id varchar NOT NULL, name varchar NOT NULL, password varchar, displayname varchar NOT NULL, coins integer default 20, bio varchar, image varchar, elo integer default 100, wins integer default 0, losses integer default 0, PRIMARY KEY (id));";
         private const string SelectAllUsersCommand = @"SELECT username, password FROM users";
-        private const string SelectUserByUsernameCommand = @"SELECT * from users WHERE name=@username";
+        private const string SelectUserByUsernameCommand = @"SELECT * from users WHERE name=@username;";
         private const string SelectUserByCredentialsCommand = @"SELECT * from users WHERE name=@username AND password=@password";
         private const string InsertUserCommand = @"INSERT INTO users(id, name, password, displayname, bio, image) VALUES (@id, @name, @pwd, @displayname, @bio, @image)";
-        private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, bio=@bio, image=@image WHERE name=@username";
+        private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, bio=@bio, image=@image WHERE name=@name";
+        private const string UpdateUserCoinsCommand = @"UPDATE users SET coins=@coins WHERE name=@name;";
+        private const string GetScoreboardCommand = @"SELECT * from users ORDER BY elo;";
 
         private readonly string _connectionString;
 
@@ -109,10 +111,26 @@ namespace MTCG.DAL
             tmp.UserData = user.UserData;
 
             using var cmd = new NpgsqlCommand(UpdateUserCommand, connection);
-            cmd.Parameters.AddWithValue("displayname", tmp.Username);
+            cmd.Parameters.AddWithValue("displayname", tmp.UserData.Displayname);
             cmd.Parameters.AddWithValue("bio", tmp.UserData.Bio);
             cmd.Parameters.AddWithValue("image", tmp.UserData.Image);
-            cmd.Parameters.AddWithValue("username", tmp.Username);
+            cmd.Parameters.AddWithValue("name", tmp.Username);
+            var affectedRows = cmd.ExecuteNonQuery();
+
+            return affectedRows > 0;
+        }
+
+        public bool UpdateUserCoins(User user) {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            User? tmp = GetUserByUsername(user.Username);
+
+            if(tmp == null) {
+                return false;
+            }
+            using var cmd = new NpgsqlCommand(UpdateUserCoinsCommand, connection);
+            cmd.Parameters.AddWithValue("coins", user.Coins);
+            cmd.Parameters.AddWithValue("name", user.Username);
             var affectedRows = cmd.ExecuteNonQuery();
 
             return affectedRows > 0;
@@ -141,10 +159,22 @@ namespace MTCG.DAL
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                var user = ReadUser(reader);
-                users.Add(user);
+                users.Add(ReadUser(reader));
             }
 
+            return users;
+        }
+
+        public List<User> GetScoreboard() {
+            List<User> users = new List<User>();
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(GetScoreboardCommand, connection);
+            using var reader = cmd.ExecuteReader();
+
+            while(reader.Read()) {
+                users.Add(ReadUser(reader));
+            }
             return users;
         }
 

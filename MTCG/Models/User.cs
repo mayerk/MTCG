@@ -29,7 +29,7 @@ namespace MTCG.Models
         }
     
         public User(string id, string username, string password, int coins, UserData userData, int elo, int wins, int losses) {
-            Id = Guid.NewGuid().ToString();
+            Id = id;
             Username = username;
             Password = password;
             Coins = coins;

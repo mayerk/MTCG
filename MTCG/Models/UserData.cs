@@ -11,8 +11,8 @@ namespace MTCG.Models {
         public string Bio { get; set; }
         public string Image { get; set; }
 
-        public UserData(string displayname, string bio, string image) {
-            this.Displayname = displayname;
+        public UserData(string name, string bio, string image) {
+            this.Displayname = name;
             this.Bio = bio;
             this.Image = image;
         }

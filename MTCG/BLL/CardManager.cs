@@ -21,22 +21,41 @@ namespace MTCG.BLL {
             }
         }
 
-        public void AquirePackage(User user, string pId) {
+        public void AquirePackage(User user, Package package) {
             if(user.Coins < 5) {
                 throw new NotEnoughCoinsException();
             }
-            /*List<Card> cards = _cardDao.GetCardsByPId(pId);
-            user.Coins -= 5;
-            foreach(Card card in cards) {
+            foreach(Card card in package.Cards) {
                 card.UId = user.Id;
-            }*/
+                if(_cardDao.UpdateCardUId(card) == false) {
+                    throw new CardNotFoundException();
+                }
+            }
+            user.Coins -= 5;
+        }
+
+        public void FillCardsInPackage(Package package) {
+            List<Card> _cards = new List<Card>();
+            foreach(Card card in package.Cards) {
+                Card? tmp = GetCardById(card.Id);
+                if(tmp == null) {
+                    throw new CardNotFoundException();
+                }
+                _cards.Add(tmp);
+            }
+            package.Cards = _cards.ToArray();
         }
 
         public List<Card> GetAllUsersCards(string uid) {
             return _cardDao.GetAllCardsByUId(uid);
         }
+
         public Card? GetCardById(string id) {
             return _cardDao.GetCardById(id) ?? throw new CardNotFoundException();
+        }
+
+        public List<Card> GetAllCardsByPId(string pid) {
+            return null;
         }
     }
 }
