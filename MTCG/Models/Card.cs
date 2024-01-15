@@ -27,6 +27,7 @@ namespace MTCG.Models {
             Id = id;
             Name = name;
             Damage = damage;
+            UId = uid;
             CardSpecification.Fill(name);
         }
 

@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 
 namespace MTCG.API.Routing.Users
 {
-    internal class ShowScoreBoardCommand: AuthenticatedRouteCommand {
+    internal class ShowScoreboardCommand: AuthenticatedRouteCommand {
 
         private readonly IUserManager _userManager;
-        public ShowScoreBoardCommand(IUserManager userManager, User identity) : base(identity) {
+        public ShowScoreboardCommand(IUserManager userManager, User identity) : base(identity) {
             _userManager = userManager;
         }
 

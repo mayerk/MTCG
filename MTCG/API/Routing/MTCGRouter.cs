@@ -22,14 +22,16 @@ namespace MTCG.API.Routing
         private readonly IUserManager _userManager;
         private readonly ICardManager _cardManager;
         private readonly IPackageManager _packageManager;
+        private readonly IDeckManager _deckManager;
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
 
-        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager)
+        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager)
         {
             _userManager = userManager;
             _cardManager = cardManager;
             _packageManager = packageManager;
+            _deckManager = deckManager;
             _identityProvider = new IdentityProvider(userManager);
             _routeParser = new IdRouteParser();
         }
@@ -58,12 +60,12 @@ namespace MTCG.API.Routing
                     
                     { Method: HttpMethod.Get, ResourcePath: "/cards" } => new ShowUserCardsCommand(_cardManager, GetIdentity(request)),
                     
-                    { Method: HttpMethod.Get, ResourcePath: "/deck" } => new ShowDeckCommand(_userManager, GetIdentity(request)),
-                    { Method: HttpMethod.Put, ResourcePath: "/deck" } => new ChooseDeckCommand(_userManager, _cardManager, DeserializeIDs(request.Payload), GetIdentity(request)), 
+                    { Method: HttpMethod.Get, ResourcePath: "/deck" } => new ShowDeckCommand(_cardManager, _deckManager, GetIdentity(request)),
+                    { Method: HttpMethod.Put, ResourcePath: "/deck" } => new ConfigureDeckCommand(_cardManager, _deckManager, DeserializeIDs(request.Payload), GetIdentity(request)), 
                     
                     { Method: HttpMethod.Get, ResourcePath: "/stats" } => new ShowUsersStatsCommand(_userManager, GetIdentity(request)), 
                     
-                    { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreBoardCommand(_userManager, GetIdentity(request)),
+                    { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreboardCommand(_userManager, GetIdentity(request)),
 
                     _ => null
                 };

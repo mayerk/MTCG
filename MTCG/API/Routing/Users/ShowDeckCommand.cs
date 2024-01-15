@@ -10,19 +10,28 @@ using System.Threading.Tasks;
 
 namespace MTCG.API.Routing.Users {
     internal class ShowDeckCommand: AuthenticatedRouteCommand {
-        private readonly IUserManager _userManager;
-        public ShowDeckCommand(IUserManager userManager, User identity): base(identity) {
-            _userManager = userManager;
+        private readonly ICardManager _cardManager;
+        private readonly IDeckManager _deckManager;
+
+        public ShowDeckCommand(ICardManager cardManager, IDeckManager deckManager, User identity): base(identity) {
+            _cardManager = cardManager;
+            _deckManager = deckManager;
         }
 
         public override HttpResponse Execute() {
             HttpResponse response;
-            List<Card> deck = _userManager.GetDeckByAuthToken(Identity.Token);
-            if(!deck.Any() ) {
+            List<Deck> deck = _deckManager.GetDeckByUId(Identity.Id);
+            List<Card> cards = new List<Card>();
+
+            if(!deck.Any()) {
                 response = new HttpResponse(StatusCode.NoContent);
-            } else {
-                response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(deck));
+                return response;
             }
+            foreach(var obj in deck) {
+                cards.Add(_cardManager.GetCardById(obj.CId));
+            }
+            response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(cards));
+
             return response;
         }
     }

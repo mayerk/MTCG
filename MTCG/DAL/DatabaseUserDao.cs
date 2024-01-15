@@ -22,7 +22,7 @@ namespace MTCG.DAL
         private const string InsertUserCommand = @"INSERT INTO users(id, name, password, displayname, bio, image) VALUES (@id, @name, @pwd, @displayname, @bio, @image)";
         private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, bio=@bio, image=@image WHERE name=@name";
         private const string UpdateUserCoinsCommand = @"UPDATE users SET coins=@coins WHERE name=@name;";
-        private const string GetScoreboardCommand = @"SELECT * from users ORDER BY elo;";
+        private const string GetScoreboardCommand = @"SELECT * from users ORDER BY elo desc;";
 
         private readonly string _connectionString;
 
