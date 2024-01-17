@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace MTCG.API.Routing.Cards {
     internal class ShowUserCardsCommand: AuthenticatedRouteCommand {
 
-        ICardManager _cardManager;
+        private readonly ICardManager _cardManager;
         public ShowUserCardsCommand(ICardManager cardManager, User identity): base(identity) {
             _cardManager = cardManager;
         }

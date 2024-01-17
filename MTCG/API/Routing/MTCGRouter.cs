@@ -5,15 +5,11 @@ using MTCG.HttpServer;
 using MTCG.HttpServer.Request;
 using MTCG.HttpServer.Routing;
 using MTCG.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HttpMethod = MTCG.HttpServer.Request.HttpMethod;
 using MTCG.API.Routing.Cards;
 using MTCG.API.Routing.Packages;
-using System.Reflection;
+using MTCG.API.Routing.Trading;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MTCG.API.Routing
 {
@@ -23,15 +19,17 @@ namespace MTCG.API.Routing
         private readonly ICardManager _cardManager;
         private readonly IPackageManager _packageManager;
         private readonly IDeckManager _deckManager;
+        private readonly ITradeManager _tradeManager;
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
 
-        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager)
+        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager, ITradeManager tradeManager)
         {
             _userManager = userManager;
             _cardManager = cardManager;
             _packageManager = packageManager;
             _deckManager = deckManager;
+            _tradeManager = tradeManager;
             _identityProvider = new IdentityProvider(userManager);
             _routeParser = new IdRouteParser();
         }
@@ -40,6 +38,7 @@ namespace MTCG.API.Routing
         {
             var isMatch = (string path) => _routeParser.IsMatch(path, "/users/{id}");
             var isUsername = (string path) => _routeParser.isUsername(path, "/cards/{username}");
+            var isTrade = (string path) => _routeParser.isTrade(path, "/tradings/{tradingdealid}");
             //var userMatchesToken = (string path, User user) => _identityProvider.ParsedUserMatchesToken(path, user);
             var parseId = (string path) => int.Parse(_routeParser.ParseParameters(path, "/messages/{id}")["id"]);
             var checkBody = (string? payload) => payload ?? throw new InvalidDataException();
@@ -65,7 +64,12 @@ namespace MTCG.API.Routing
                     
                     { Method: HttpMethod.Get, ResourcePath: "/stats" } => new ShowUsersStatsCommand(_userManager, GetIdentity(request)), 
                     
-                    { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreboardCommand(_userManager, GetIdentity(request)),
+                    { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreboardCommand(_userManager, GetIdentity(request)), 
+                    
+                    { Method: HttpMethod.Get, ResourcePath: "/tradings" } => new ShowAvailableTradesCommand(_tradeManager, GetIdentity(request)), 
+                    { Method: HttpMethod.Post, ResourcePath: "/tradings" } => new CreateTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), Deserialize<Trade>(request.Payload)), 
+                    { Method: HttpMethod.Delete, ResourcePath: var path } when isTrade(path) => new DeleteTradingDealCommand(_tradeManager, _cardManager, GetIdentity(request), GetParameterFromRequest(path)), 
+                    { Method: HttpMethod.Post, ResourcePath: var path } when isTrade(path) => new ProcessTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), GetParameterFromRequest(path), DeserializeString(request.Payload)),
 
                     _ => null
                 };
@@ -87,6 +91,11 @@ namespace MTCG.API.Routing
             return data ?? throw new InvalidDataException();
         }
 
+        private string DeserializeString(string? body) {
+            var data = body is not null ? JsonConvert.DeserializeObject<string>(body) : null;
+            return data ?? throw new InvalidDataException();
+        }
+
         private User GetIdentity(HttpRequest request)
         {
             return _identityProvider.GetIdentityForRequest(request) ?? throw new RouteNotAuthenticatedException();
@@ -96,7 +105,7 @@ namespace MTCG.API.Routing
             return _identityProvider.ValidateIdentity(request, path) ?? throw new RouteNotAuthenticatedException();
         }
 
-        private string GetUsernameFromPath(string path) {
+        private string GetParameterFromRequest(string path) {
             return path.Substring(path.LastIndexOf("/") + 1);
         }
     }

@@ -19,6 +19,11 @@ namespace MTCG.API.Routing
             return true;
         }
 
+        public bool isTrade(string resourcePath, string routePattern) {
+            var pattern = "^" + routePattern.Replace("{tradingdealid}", ".*").Replace("/", "\\/") + "(\\?.*)?$";
+            return Regex.IsMatch(resourcePath, pattern);
+        }
+
         public Dictionary<string, string> ParseParameters(string resourcePath, string routePattern)
         {
             // query parameters

@@ -21,6 +21,9 @@ namespace MTCG.BLL {
         public void ConfigureDeck(List<Card> cards) {
             _deckDao.InsertDeck(cards);
         }
-        
+
+        public Deck GetDeckByCId(string cid) {
+            return _deckDao.GetDeckByCId(cid);
+        }
     }
 }

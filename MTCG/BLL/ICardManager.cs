@@ -11,8 +11,7 @@ namespace MTCG.BLL {
         void AquirePackage(User user, Package package);
         List<Card> GetAllUsersCards(string uid);
         Card? GetCardById(string id);
-        List<Card> GetAllCardsByPId(string pid);
-
+        void UpdateCardUId(Card card);
         void FillCardsInPackage(Package package);
     }
 }

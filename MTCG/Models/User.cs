@@ -15,10 +15,6 @@ namespace MTCG.Models
         public int Wins { get; set; } = 0;
         public int Losses { get; set; } = 0;
 
-        public User(string username) {
-            Username = username;
-        }
-
         [JsonConstructor]
         public User(string username, string password, UserData userdata)
         {

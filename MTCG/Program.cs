@@ -22,11 +22,13 @@ namespace MTCG
             ICardDao cardDao = new DatabaseCardDao(connectionString);
             IPackageDao packageDao = new DatabasePackageDao(connectionString);
             IDeckDao deckDao = new DatabaseDeckDao(connectionString);
+            ITradeDao tradeDao = new DatabaseTradeDao(connectionString);
 
             IUserManager userManager = new UserManager(userDao);
             ICardManager cardManager = new CardManager(cardDao);
             IPackageManager packageManager = new PackageManager(packageDao);
             IDeckManager deckManager = new DeckManager(deckDao);
+            ITradeManager tradeManager = new TradeManager(tradeDao);
 
             /*
             // Test: Register User
@@ -60,7 +62,7 @@ namespace MTCG
             messages = messageManager.ListMessages(user).ToList();
             messages.ForEach(m => Console.WriteLine($"Id: {m.Id}, Content: {m.Content}"));
             */
-            var router = new MTCGRouter(userManager, cardManager, packageManager, deckManager);
+            var router = new MTCGRouter(userManager, cardManager, packageManager, deckManager, tradeManager);
             var server = new HttpServer.HttpServer(router, IPAddress.Any, 10001);
             server.Start();            
         }

@@ -9,5 +9,7 @@ namespace MTCG.DAL {
     internal interface IDeckDao {
         List<Deck> GetDeckByUId(string uid);
         bool InsertDeck(List<Card> cards);
+
+        Deck? GetDeckByCId(string cid);
     }
 }

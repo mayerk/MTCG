@@ -9,5 +9,7 @@ namespace MTCG.BLL {
     internal interface IDeckManager {
         List<Deck> GetDeckByUId(string uid);
         void ConfigureDeck(List<Card> cards);
+
+        Deck GetDeckByCId(string cid);
     }
 }

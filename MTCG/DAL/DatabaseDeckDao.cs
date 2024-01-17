@@ -15,6 +15,7 @@ namespace MTCG.DAL {
         private readonly string CreateDeckTableCommand = @"CREATE TABLE IF NOT EXISTS decks(id varchar NOT NULL, uid varchar NOT NULL, cid varchar, PRIMARY KEY(id));";
         private readonly string DeleteTableEntriesCommand = @"DELETE from decks;";
         private readonly string GetDeckByUIdCommand = @"SELECT * from decks WHERE uid=@uid;";
+        private readonly string GetDeckByCIdCommand = @"SELECT * from decks WHERE cid=@cid;";
         private readonly string InsertDeckCommand = @"INSERT INTO decks (id, uid, cid) VALUES (@id, @uid, @cid);";
 
 
@@ -61,6 +62,19 @@ namespace MTCG.DAL {
                 inserted = affectedRows > 0;
             }
             return inserted;
+        }
+
+        public Deck? GetDeckByCId(string cid) {
+            Deck? deck = null;
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(GetDeckByCIdCommand, connection);
+            cmd.Parameters.AddWithValue("cid", cid);
+            using var reader = cmd.ExecuteReader();
+            if(reader.Read()) {
+                deck = ReadDeck(reader);
+            }
+            return deck;
         }
 
         private Deck ReadDeck(IDataRecord record) {

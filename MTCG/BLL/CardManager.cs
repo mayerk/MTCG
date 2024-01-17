@@ -54,8 +54,8 @@ namespace MTCG.BLL {
             return _cardDao.GetCardById(id) ?? throw new CardNotFoundException();
         }
 
-        public List<Card> GetAllCardsByPId(string pid) {
-            return null;
+        public void UpdateCardUId(Card card) {
+            _cardDao.UpdateCardUId(card);
         }
     }
 }
