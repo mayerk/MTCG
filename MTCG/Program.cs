@@ -1,5 +1,6 @@
 ﻿using MTCG.API.Routing;
 using MTCG.BLL;
+using MTCG.BLL.Managers;
 using MTCG.DAL;
 using MTCG.Models;
 using Npgsql;

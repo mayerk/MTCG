@@ -1,14 +1,15 @@
-﻿using MTCG.BLL;
-using MTCG.HttpServer.Response;
-using MTCG.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
+using MTCG.BLL.Managers;
+using MTCG.HttpServer.Response;
+using MTCG.Models;
+using Newtonsoft.Json;
 
-namespace MTCG.API.Routing.Users {
+namespace MTCG.API.Routing.Users
+{
     internal class ShowDeckCommand: AuthenticatedRouteCommand {
         private readonly ICardManager _cardManager;
         private readonly IDeckManager _deckManager;

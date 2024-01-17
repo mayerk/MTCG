@@ -1,14 +1,13 @@
-﻿using Npgsql;
-using MTCG.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
+using MTCG.Models;
+using System.Data;
 using MTCG.BLL;
-using System.Data.Common;
+using MTCG.BLL.Exceptions;
 
 namespace MTCG.DAL
 {

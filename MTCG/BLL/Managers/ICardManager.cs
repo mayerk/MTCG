@@ -1,12 +1,14 @@
-﻿using MTCG.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MTCG.Models;
 
-namespace MTCG.BLL {
-    internal interface ICardManager {
+namespace MTCG.BLL.Managers
+{
+    internal interface ICardManager
+    {
         void CreateCard(Card card);
         void AquirePackage(User user, Package package);
         List<Card> GetAllUsersCards(string uid);

@@ -1,11 +1,11 @@
-﻿using MTCG.Models;
-using Npgsql;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MTCG.Models;
+using Npgsql;
 
 namespace MTCG.DAL {
     internal class DatabaseDeckDao: IDeckDao {
