@@ -36,11 +36,7 @@ namespace MTCG.API.Routing
         public IRouteCommand? Resolve(HttpRequest request)
         {
             var isMatch = (string path) => _routeParser.IsMatch(path, "/users/{id}");
-            var isUsername = (string path) => _routeParser.isUsername(path, "/cards/{username}");
             var isTrade = (string path) => _routeParser.isTrade(path, "/tradings/{tradingdealid}");
-            //var userMatchesToken = (string path, User user) => _identityProvider.ParsedUserMatchesToken(path, user);
-            var parseId = (string path) => int.Parse(_routeParser.ParseParameters(path, "/messages/{id}")["id"]);
-            var checkBody = (string? payload) => payload ?? throw new InvalidDataException();
 
             try
             {

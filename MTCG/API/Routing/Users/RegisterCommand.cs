@@ -26,13 +26,11 @@ namespace MTCG.API.Routing.Users
         {
             HttpResponse response;
 
-            try
-            {
+            try {
                 _userManager.RegisterUser(_credentials);
                 response = new HttpResponse(StatusCode.Created);
             }
-            catch (DuplicateUserException)
-            {
+            catch (DuplicateUserException) {
                 response = new HttpResponse(StatusCode.Conflict);
             }
 
