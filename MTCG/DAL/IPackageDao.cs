@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MTCG.Models;
 
 namespace MTCG.DAL {
-    internal interface IPackageDao {
+    public interface IPackageDao {
         bool InsertPackage(Package package);
         Package? GetFirstPackage();
         Package? GetPackageById(string id);

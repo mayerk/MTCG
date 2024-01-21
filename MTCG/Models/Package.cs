@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    internal class Package {
+    public class Package {
 
         public string Id;
         public string PId;

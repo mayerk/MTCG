@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    internal class UserData {
+    public class UserData {
         public string Displayname { get; set; }
         public string Bio { get; set; }
         public string Image { get; set; }

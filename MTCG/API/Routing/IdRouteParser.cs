@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MTCG.API.Routing
 {
-    internal class IdRouteParser
+    public class IdRouteParser
     {
         public bool IsMatch(string resourcePath, string routePattern)
         {

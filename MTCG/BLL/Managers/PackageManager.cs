@@ -9,7 +9,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal class PackageManager : IPackageManager
+    public class PackageManager : IPackageManager
     {
 
         private readonly IPackageDao _packageDao;
@@ -41,12 +41,6 @@ namespace MTCG.BLL.Managers
         public void DeletePackage(string pid)
         {
             _packageDao.DeletePackage(pid);
-        }
-
-        public Package? GetPackageById(string id)
-        {
-            List<Package> packages = _packageDao.GetPackagesByPId(id);
-            return null;
         }
     }
 }

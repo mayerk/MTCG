@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.HttpServer
 {
-    internal class HttpClientHandler
+    public class HttpClientHandler
     {
         private enum ParseState
         {

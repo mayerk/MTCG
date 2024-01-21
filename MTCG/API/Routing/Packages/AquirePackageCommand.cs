@@ -10,7 +10,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing.Packages
 {
-    internal class AquirePackageCommand : AuthenticatedRouteCommand
+    public class AquirePackageCommand : AuthenticatedRouteCommand
     {
         private readonly IPackageManager _packageManager;
         private readonly ICardManager _cardManager;

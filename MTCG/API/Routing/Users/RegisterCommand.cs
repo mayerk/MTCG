@@ -11,7 +11,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing.Users
 {
-    internal class RegisterCommand : IRouteCommand
+    public class RegisterCommand : IRouteCommand
     {
         private readonly IUserManager _userManager;
         private readonly Credentials _credentials;

@@ -8,7 +8,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal class DeckManager : IDeckManager
+    public class DeckManager : IDeckManager
     {
         private readonly IDeckDao _deckDao;
 

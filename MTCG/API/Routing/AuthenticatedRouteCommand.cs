@@ -9,7 +9,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing
 {
-    internal abstract class AuthenticatedRouteCommand: IRouteCommand
+    public abstract class AuthenticatedRouteCommand: IRouteCommand
     {
         public User Identity { get; init; }
 

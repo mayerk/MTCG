@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MTCG.Models;
 
 namespace MTCG.DAL {
-    internal class InMemoryCardDao: ICardDao {
+    public class InMemoryCardDao: ICardDao {
 
         private readonly List<Card> _cards = new();
 
@@ -29,6 +29,10 @@ namespace MTCG.DAL {
         }
 
         public bool UpdateCardUId(Card card) {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteCardById(string id) {
             throw new NotImplementedException();
         }
     }

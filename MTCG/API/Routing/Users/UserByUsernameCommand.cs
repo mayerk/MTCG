@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace MTCG.API.Routing.Users
 {
-    internal class UserByUsernameCommand: AuthenticatedRouteCommand {
+    public class UserByUsernameCommand: AuthenticatedRouteCommand {
 
         private readonly IUserManager _userManager;
 

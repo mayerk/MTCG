@@ -12,7 +12,7 @@ using MTCG.BLL.Managers;
 
 namespace MTCG.API.Routing
 {
-    internal class MTCGRouter : IRouter
+    public class MTCGRouter : IRouter
     {
         private readonly IUserManager _userManager;
         private readonly ICardManager _cardManager;

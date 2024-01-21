@@ -9,7 +9,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal class UserManager : IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IUserDao _userDao;
 
@@ -66,6 +66,10 @@ namespace MTCG.BLL.Managers
         public List<User> GetScoreboard()
         {
             return _userDao.GetScoreboard();
+        }
+
+        public bool DeleteUserByUsername(string username) {
+           return _userDao.DeleteUserByUsername(username);
         }
     }
 }

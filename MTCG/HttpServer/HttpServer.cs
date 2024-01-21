@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.HttpServer
 {
-    internal class HttpServer
+    public class HttpServer
     {
         private readonly IRouter _router;
         private readonly TcpListener _listener;

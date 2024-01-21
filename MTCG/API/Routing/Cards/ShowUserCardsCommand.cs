@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace MTCG.API.Routing.Cards
 {
-    internal class ShowUserCardsCommand: AuthenticatedRouteCommand {
+    public class ShowUserCardsCommand: AuthenticatedRouteCommand {
 
         private readonly ICardManager _cardManager;
         public ShowUserCardsCommand(ICardManager cardManager, User identity): base(identity) {

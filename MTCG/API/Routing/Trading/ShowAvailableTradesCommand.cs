@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace MTCG.API.Routing.Trading
 {
-    internal class ShowAvailableTradesCommand: AuthenticatedRouteCommand
+    public class ShowAvailableTradesCommand: AuthenticatedRouteCommand
     {
         private readonly ITradeManager _tradeManager;
 

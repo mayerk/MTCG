@@ -9,7 +9,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal class CardManager : ICardManager
+    public class CardManager : ICardManager
     {
 
         private readonly ICardDao _cardDao;
@@ -72,6 +72,10 @@ namespace MTCG.BLL.Managers
         public void UpdateCardUId(Card card)
         {
             _cardDao.UpdateCardUId(card);
+        }
+
+        public bool DeleteCardById(string id) {
+            return _cardDao.DeleteCardById(id);
         }
     }
 }

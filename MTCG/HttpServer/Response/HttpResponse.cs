@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.HttpServer.Response
 {
-    internal class HttpResponse
+    public class HttpResponse
     {
         public StatusCode StatusCode { get; init; }
         public string? Payload { get; init; }

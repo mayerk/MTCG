@@ -9,7 +9,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal class TradeManager : ITradeManager
+    public class TradeManager : ITradeManager
     {
 
         private readonly ITradeDao _tradeDao;

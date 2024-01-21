@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    internal class UserStats {
+    public class UserStats {
         public string Name { get; set; }
         public int Elo { get; set; }
         public int Wins { get; set; }

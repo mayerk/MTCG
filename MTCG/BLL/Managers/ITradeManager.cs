@@ -7,7 +7,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal interface ITradeManager
+    public interface ITradeManager
     {
 
         List<Trade> GetAllTrades();

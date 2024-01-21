@@ -7,7 +7,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal interface IDeckManager
+    public interface IDeckManager
     {
         List<Deck> GetDeckByUId(string uid);
         void ConfigureDeck(List<Card> cards);

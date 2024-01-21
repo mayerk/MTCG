@@ -9,7 +9,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing
 {
-    internal class IdentityProvider
+    public class IdentityProvider
     {
         private readonly IUserManager _userManager;
 

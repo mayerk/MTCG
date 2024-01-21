@@ -10,7 +10,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing.Users
 {
-    internal class UpdateUserCommand: AuthenticatedRouteCommand {
+    public class UpdateUserCommand: AuthenticatedRouteCommand {
 
         private readonly IUserManager _userManager;
         private readonly UserData _userData;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.HttpServer.Request
 {
-    internal enum HttpMethod
+    public enum HttpMethod
     {
         Get,
         Post,
@@ -15,7 +15,7 @@ namespace MTCG.HttpServer.Request
         Patch
     }
 
-    internal static class MethodUtilities
+    public static class MethodUtilities
     {
         public static HttpMethod GetMethod(string method)
         {

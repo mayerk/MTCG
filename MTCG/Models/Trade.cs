@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace MTCG.Models {
-    internal class Trade {
+    public class Trade {
         public string Id { get; set; }
         public string CId { get; set; }
         public string CardType { get; set; }
@@ -15,11 +15,11 @@ namespace MTCG.Models {
             MinimumDamage = minimumDamage;
         }
 
-        public Trade(string cid, string cardType, int damage) {
+        public Trade(string cardToTrade, string type, int minimumDamage) {
             Id = Guid.NewGuid().ToString();
-            CId = cid;
-            CardType = cardType;
-            MinimumDamage = damage;
+            CId = cardToTrade;
+            CardType = type;
+            MinimumDamage = minimumDamage;
         }
     }
 }

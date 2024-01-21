@@ -7,12 +7,10 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal interface IPackageManager
+    public interface IPackageManager
     {
         void CreatePackage(Card[] cards);
         Package GetFirstPackage();
         void DeletePackage(string pid);
-
-        Package? GetPackageById(string id);
     }
 }

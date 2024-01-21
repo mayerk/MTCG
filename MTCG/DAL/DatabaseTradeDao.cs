@@ -8,7 +8,7 @@ using Npgsql;
 using System.Data;
 
 namespace MTCG.DAL {
-    internal class DatabaseTradeDao: ITradeDao {
+    public class DatabaseTradeDao: ITradeDao {
 
         private readonly string _connectionString;
 

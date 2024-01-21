@@ -11,7 +11,7 @@ using MTCG.BLL.Exceptions;
 
 namespace MTCG.DAL
 {
-    internal class DatabaseUserDao: IUserDao
+    public class DatabaseUserDao: IUserDao
     {
         private const string DeleteTableEntriesCommand = @"DELETE from users";
         private const string CreateUserTableCommand = @"CREATE TABLE IF NOT EXISTS users (id varchar NOT NULL, name varchar NOT NULL, password varchar, displayname varchar NOT NULL, coins integer default 20, bio varchar, image varchar, elo integer default 100, wins integer default 0, losses integer default 0, PRIMARY KEY (id));";
@@ -22,6 +22,7 @@ namespace MTCG.DAL
         private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, bio=@bio, image=@image WHERE name=@name";
         private const string UpdateUserCoinsCommand = @"UPDATE users SET coins=@coins WHERE name=@name;";
         private const string GetScoreboardCommand = @"SELECT * from users ORDER BY elo desc;";
+        private const string DeleteUserByUsernameCommand = @"DELETE from users WHERE name=@name;";
 
         private readonly string _connectionString;
 
@@ -30,6 +31,16 @@ namespace MTCG.DAL
         {
             _connectionString = connectionString;
             EnsureTables();
+        }
+
+        private void EnsureTables() {
+            // TODO: handle exceptions
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(CreateUserTableCommand, connection);
+            cmd.ExecuteNonQuery();
+            using var cmd2 = new NpgsqlCommand(DeleteTableEntriesCommand, connection);
+            cmd2.ExecuteNonQuery();
         }
 
         public List<Card> GetDeckByAuthToken(string token) {
@@ -135,17 +146,6 @@ namespace MTCG.DAL
             return affectedRows > 0;
         }
 
-        private void EnsureTables()
-        {
-            // TODO: handle exceptions
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-            using var cmd = new NpgsqlCommand(CreateUserTableCommand, connection);
-            cmd.ExecuteNonQuery();
-            using var cmd2 = new NpgsqlCommand(DeleteTableEntriesCommand, connection);
-            cmd2.ExecuteNonQuery();
-        }
-
         private IEnumerable<User> GetAllUsers() 
         {
             // TODO: handle exceptions
@@ -162,6 +162,15 @@ namespace MTCG.DAL
             }
 
             return users;
+        }
+
+        public bool DeleteUserByUsername(string username) {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(DeleteUserByUsernameCommand, connection);
+            cmd.Parameters.AddWithValue("name", username);
+            var affectedRows = cmd.ExecuteNonQuery();
+            return affectedRows > 0;
         }
 
         public List<User> GetScoreboard() {

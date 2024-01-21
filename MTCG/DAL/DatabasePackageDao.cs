@@ -10,7 +10,7 @@ using MTCG.BLL;
 using MTCG.BLL.Exceptions;
 
 namespace MTCG.DAL {
-    internal class DatabasePackageDao : IPackageDao {
+    public class DatabasePackageDao : IPackageDao {
 
         private readonly string _connectionString;
            

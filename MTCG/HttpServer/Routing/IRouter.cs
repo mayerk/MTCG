@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.HttpServer.Routing
 {
-    internal interface IRouter
+    public interface IRouter
     {
         IRouteCommand? Resolve(HttpRequest request);
     }

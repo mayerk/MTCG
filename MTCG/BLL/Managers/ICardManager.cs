@@ -7,7 +7,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal interface ICardManager
+    public interface ICardManager
     {
         void CreateCard(Card card);
         void AquirePackage(User user, Package package);
@@ -15,5 +15,6 @@ namespace MTCG.BLL.Managers
         Card? GetCardById(string id);
         void UpdateCardUId(Card card);
         void FillCardsInPackage(Package package);
+        bool DeleteCardById(string id);
     }
 }

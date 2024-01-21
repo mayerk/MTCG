@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MTCG.Models;
 
 namespace MTCG.DAL {
-    internal interface ITradeDao {
+    public interface ITradeDao {
 
         List<Trade> GetAllTrades();
         Trade GetTradeById(string id);

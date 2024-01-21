@@ -7,7 +7,7 @@ using MTCG.Models;
 
 namespace MTCG.BLL.Managers
 {
-    internal interface IUserManager
+    public interface IUserManager
     {
         User LoginUser(Credentials credentials);
         void RegisterUser(Credentials credentials);
@@ -17,5 +17,6 @@ namespace MTCG.BLL.Managers
         void UpdateUserCoins(User user);
         List<Card> GetDeckByAuthToken(string token);
         List<User> GetScoreboard();
+        bool DeleteUserByUsername(string username);
     }
 }

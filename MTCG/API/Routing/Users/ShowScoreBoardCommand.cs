@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace MTCG.API.Routing.Users
 {
-    internal class ShowScoreboardCommand: AuthenticatedRouteCommand {
+    public class ShowScoreboardCommand: AuthenticatedRouteCommand {
 
         private readonly IUserManager _userManager;
         public ShowScoreboardCommand(IUserManager userManager, User identity) : base(identity) {

@@ -10,7 +10,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing.Trading
 {
-    internal class ProcessTradingDealCommand: AuthenticatedRouteCommand
+    public class ProcessTradingDealCommand: AuthenticatedRouteCommand
     {
         private readonly ITradeManager _tradeManager;
         private readonly ICardManager _cardManager;

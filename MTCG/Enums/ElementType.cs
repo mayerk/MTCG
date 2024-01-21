@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Enums {
-    internal enum ElementType {
+    public enum ElementType {
         FIRE, WATER, NORMAL
     }
 }

@@ -7,7 +7,7 @@ using MTCG.Models;
 
 namespace MTCG.DAL
 {
-    internal class InMemoryUserDao : IUserDao
+    public class InMemoryUserDao : IUserDao
     {
         private readonly List<User> _users = new();
 
@@ -63,6 +63,10 @@ namespace MTCG.DAL
         }
 
         public List<User> GetScoreboard() {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteUserByUsername(string username) {
             throw new NotImplementedException();
         }
     }

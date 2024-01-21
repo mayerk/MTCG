@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    internal class Card {
+    public class Card {
         public string Id { get; set; }
         public string Name { get; set; } = "";
         public double Damage { get; } = 0;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MTCG.Models;
 
 namespace MTCG.DAL {
-    internal class InMemoryPackageDao: IPackageDao {
+    public class InMemoryPackageDao: IPackageDao {
         private readonly List<Package> _packages = new();
 
         public bool InsertPackage(Package package) {

@@ -10,7 +10,7 @@ using MTCG.Models;
 
 namespace MTCG.API.Routing.Cards
 {
-    internal class ConfigureDeckCommand : AuthenticatedRouteCommand
+    public class ConfigureDeckCommand : AuthenticatedRouteCommand
     {
         private readonly ICardManager _cardManager;
         private readonly IDeckManager _deckManager;

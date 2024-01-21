@@ -8,7 +8,7 @@ using MTCG.Models;
 using Npgsql;
 
 namespace MTCG.DAL {
-    internal class DatabaseDeckDao: IDeckDao {
+    public class DatabaseDeckDao: IDeckDao {
 
         private readonly string _connectionString;
 

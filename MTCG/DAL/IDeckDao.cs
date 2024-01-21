@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MTCG.Models;
 
 namespace MTCG.DAL {
-    internal interface IDeckDao {
+    public interface IDeckDao {
         List<Deck> GetDeckByUId(string uid);
         bool InsertDeck(List<Card> cards);
 

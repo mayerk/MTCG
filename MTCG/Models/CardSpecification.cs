@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    internal class CardSpecification {
+    public class CardSpecification {
 
         public CardType cardType;
 

@@ -10,7 +10,7 @@ using System.Data;
 using MTCG.BLL.Exceptions;
 
 namespace MTCG.DAL {
-    internal class DatabaseCardDao : ICardDao {
+    public class DatabaseCardDao : ICardDao {
 
         private readonly string _connectionString;
 
@@ -20,6 +20,7 @@ namespace MTCG.DAL {
         private readonly string GetCardByIdCommand = @"SELECT * from cards WHERE id=@id;";
         private readonly string UpdateCardUIdCommand = @"UPDATE cards SET uid=@uid WHERE id=@id;";
         private readonly string GetAllUsersCardsCommand = @"SELECT * from cards WHERE uid=@uid;";
+        private readonly string DeleteCardByIdCommand = @"DELETE from cards WHERE id=@id;";
 
         public DatabaseCardDao(string connectionString) {
             _connectionString = connectionString;
@@ -87,6 +88,15 @@ namespace MTCG.DAL {
             cmd.Parameters.AddWithValue ("id", card.Id);
             var affectedRows = cmd.ExecuteNonQuery();
 
+            return affectedRows > 0;
+        }
+
+        public bool DeleteCardById(string id) {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(DeleteCardByIdCommand, connection);
+            cmd.Parameters.AddWithValue("id", id);
+            var affectedRows = cmd.ExecuteNonQuery();
             return affectedRows > 0;
         }
 
