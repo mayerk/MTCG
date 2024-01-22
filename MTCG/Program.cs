@@ -19,6 +19,7 @@ namespace MTCG
             IPackageDao packageDao = new DatabasePackageDao(connectionString);
             IDeckDao deckDao = new DatabaseDeckDao(connectionString);
             ITradeDao tradeDao = new DatabaseTradeDao(connectionString);
+            ICouponDao couponDao = new DatabaseCouponDao(connectionString);
 
             IUserManager userManager = new UserManager(userDao);
             ICardManager cardManager = new CardManager(cardDao);
@@ -26,8 +27,9 @@ namespace MTCG
             IDeckManager deckManager = new DeckManager(deckDao);
             ITradeManager tradeManager = new TradeManager(tradeDao);
             IGameManager gameManager = new GameManager();
+            ICouponManager couponManager = new CouponManager(couponDao);
 
-            var router = new MTCGRouter(userManager, cardManager, packageManager, deckManager, tradeManager, gameManager);
+            var router = new MTCGRouter(userManager, cardManager, packageManager, deckManager, tradeManager, gameManager, couponManager);
             var server = new HttpServer.HttpServer(router, IPAddress.Any, 10001);
             server.Start();            
         }

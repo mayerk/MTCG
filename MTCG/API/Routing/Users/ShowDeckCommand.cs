@@ -42,7 +42,7 @@ namespace MTCG.API.Routing.Users
             if(_plain) {
                 string str = "Deck of " + Identity.UserData.Displayname + "\n";
                 foreach(var card in cards) {
-                    str += "* " + card.Name + " - " + card.Damage + " - " + card.Id + "\n";
+                    str += "* " + card.Name + " - " + card.Damage + " Damage - " + card.Id + "\n";
                 }
                 response = new HttpResponse(StatusCode.Ok, str);
             } else {

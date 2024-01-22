@@ -9,7 +9,7 @@ using MTCG.API.Routing.Cards;
 using MTCG.API.Routing.Packages;
 using MTCG.API.Routing.Trading;
 using MTCG.BLL.Managers;
-using System.Reflection.Metadata.Ecma335;
+using MTCG.API.Routing.Coupons;
 
 namespace MTCG.API.Routing
 {
@@ -21,10 +21,11 @@ namespace MTCG.API.Routing
         private readonly IDeckManager _deckManager;
         private readonly ITradeManager _tradeManager;
         private readonly IGameManager _gameManager;
+        private readonly ICouponManager _couponManager;
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
 
-        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager, ITradeManager tradeManager, IGameManager gameManager)
+        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager, ITradeManager tradeManager, IGameManager gameManager, ICouponManager couponManager)
         {
             _userManager = userManager;
             _cardManager = cardManager;
@@ -32,6 +33,7 @@ namespace MTCG.API.Routing
             _deckManager = deckManager;
             _tradeManager = tradeManager;
             _gameManager = gameManager;
+            _couponManager = couponManager;
             _identityProvider = new IdentityProvider(userManager);
             _routeParser = new IdRouteParser();
         }
@@ -70,7 +72,10 @@ namespace MTCG.API.Routing
                     { Method: HttpMethod.Get, ResourcePath: "/tradings" } => new ShowAvailableTradesCommand(_tradeManager, GetIdentity(request)), 
                     { Method: HttpMethod.Post, ResourcePath: "/tradings" } => new CreateTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), Deserialize<Trade>(request.Payload)), 
                     { Method: HttpMethod.Delete, ResourcePath: var path } when isTrade(path) => new DeleteTradingDealCommand(_tradeManager, _cardManager, GetIdentity(request), GetParameterFromRequest(path)), 
-                    { Method: HttpMethod.Post, ResourcePath: var path } when isTrade(path) => new ProcessTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), GetParameterFromRequest(path), DeserializeString(request.Payload)),
+                    { Method: HttpMethod.Post, ResourcePath: var path } when isTrade(path) => new ProcessTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), GetParameterFromRequest(path), DeserializeString(request.Payload)), 
+                    
+                    { Method: HttpMethod.Post, ResourcePath: "/coupon" } => new CreateCouponCommand(_couponManager, Deserialize<Coupon>(request.Payload), GetIdentity(request)), 
+                    { Method: HttpMethod.Post, ResourcePath: "/redeem" } => new RedeemCouponCommand(_couponManager, _userManager, DeserializeString(request.Payload), GetIdentity(request)),
 
                     _ => null
                 };;

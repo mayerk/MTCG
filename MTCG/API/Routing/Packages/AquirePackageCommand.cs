@@ -29,13 +29,13 @@ namespace MTCG.API.Routing.Packages
                 Package? package = _packageManager.GetFirstPackage();
                 _cardManager.FillCardsInPackage(package);
                 _cardManager.AquirePackage(Identity, package);
-                _userManager.UpdateUserCoins(Identity);
+                _userManager.UpdateUser(Identity);
                 _packageManager.DeletePackage(package.PId);
                 response = new HttpResponse(StatusCode.Ok);
-            } catch(NoPackageAvailableException e) {
+            } catch(NoPackageAvailableException) {
                 response = new HttpResponse(StatusCode.NotFound);
                 return response;
-            } catch(NotEnoughCoinsException e) {
+            } catch(NotEnoughCoinsException) {
                 response = new HttpResponse(StatusCode.Forbidden);
                 return response;
             }

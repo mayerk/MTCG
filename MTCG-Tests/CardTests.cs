@@ -24,6 +24,7 @@ namespace MTCG_Tests {
             Card? tmp = _cardManager.GetCardById(card.Id);
             if(tmp == null) {
                 Assert.Fail("Could not retreive Card with Id " + _cardId);
+                return;
             }
             Assert.That(tmp.Name, Is.EqualTo(card.Name));
         }

@@ -71,7 +71,7 @@ namespace MTCG_Tests {
                 return;
             }
             user.Coins = 15;
-            _userManager.UpdateUserCoins(user);
+            _userManager.UpdateUser(user);
             user = _userManager.GetUserByUsername("test");
             Assert.That(user.Coins, Is.EqualTo(15));
         }

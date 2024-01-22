@@ -40,7 +40,7 @@ namespace MTCG.API.Routing.Packages
                 {
                     _cardManager.CreateCard(card);
                 }
-                catch (DuplicateCardException e)
+                catch (DuplicateCardException)
                 {
                     inserted = false;
                 }

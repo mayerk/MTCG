@@ -33,7 +33,7 @@ namespace MTCG.API.Routing.Cards
                 try {
                     card = _cardManager.GetCardById(id);
                 }
-                catch (CardNotFoundException e) {
+                catch (CardNotFoundException) {
                     card = null;
                 }
 

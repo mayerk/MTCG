@@ -19,7 +19,7 @@ namespace MTCG.DAL
         private const string SelectUserByUsernameCommand = @"SELECT * from users WHERE name=@username;";
         private const string SelectUserByCredentialsCommand = @"SELECT * from users WHERE name=@username AND password=@password";
         private const string InsertUserCommand = @"INSERT INTO users(id, name, password, displayname, bio, image) VALUES (@id, @name, @pwd, @displayname, @bio, @image)";
-        private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, bio=@bio, image=@image, elo=@elo, wins=@wins, losses=@losses WHERE name=@name";
+        private const string UpdateUserCommand = @"UPDATE users SET displayname=@displayname, coins=@coins, bio=@bio, image=@image, elo=@elo, wins=@wins, losses=@losses WHERE name=@name";
         private const string UpdateUserCoinsCommand = @"UPDATE users SET coins=@coins WHERE name=@name;";
         private const string GetScoreboardCommand = @"SELECT * from users ORDER BY elo desc;";
         private const string DeleteUserByUsernameCommand = @"DELETE from users WHERE name=@name;";
@@ -121,6 +121,7 @@ namespace MTCG.DAL
 
             using var cmd = new NpgsqlCommand(UpdateUserCommand, connection);
             cmd.Parameters.AddWithValue("displayname", user.UserData.Displayname);
+            cmd.Parameters.AddWithValue("coins", user.Coins);
             cmd.Parameters.AddWithValue("bio", user.UserData.Bio);
             cmd.Parameters.AddWithValue("image", user.UserData.Image);
             cmd.Parameters.AddWithValue("elo", user.Elo);

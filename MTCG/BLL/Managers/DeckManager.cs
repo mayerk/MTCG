@@ -28,7 +28,7 @@ namespace MTCG.BLL.Managers
             _deckDao.InsertDeck(cards);
         }
 
-        public Deck GetDeckByCId(string cid)
+        public Deck? GetDeckByCId(string cid)
         {
             return _deckDao.GetDeckByCId(cid);
         }

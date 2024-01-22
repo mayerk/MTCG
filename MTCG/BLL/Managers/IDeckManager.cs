@@ -11,7 +11,7 @@ namespace MTCG.BLL.Managers
     {
         List<Deck> GetDeckByUId(string uid);
         void ConfigureDeck(List<Card> cards);
-        Deck GetDeckByCId(string cid);
+        Deck? GetDeckByCId(string cid);
         void DeleteDeckByUId(string uid);
     }
 }
