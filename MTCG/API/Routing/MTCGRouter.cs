@@ -19,16 +19,18 @@ namespace MTCG.API.Routing
         private readonly IPackageManager _packageManager;
         private readonly IDeckManager _deckManager;
         private readonly ITradeManager _tradeManager;
+        private readonly IGameManager _gameManager;
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
 
-        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager, ITradeManager tradeManager)
+        public MTCGRouter(IUserManager userManager, ICardManager cardManager, IPackageManager packageManager, IDeckManager deckManager, ITradeManager tradeManager, IGameManager gameManager)
         {
             _userManager = userManager;
             _cardManager = cardManager;
             _packageManager = packageManager;
             _deckManager = deckManager;
             _tradeManager = tradeManager;
+            _gameManager = gameManager;
             _identityProvider = new IdentityProvider(userManager);
             _routeParser = new IdRouteParser();
         }
@@ -61,13 +63,15 @@ namespace MTCG.API.Routing
                     
                     { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreboardCommand(_userManager, GetIdentity(request)), 
                     
+                    { Method: HttpMethod.Post, ResourcePath: "/battles" } => new ProcessBattleCommand(_cardManager, _deckManager, _gameManager, GetIdentity(request)),
+                    
                     { Method: HttpMethod.Get, ResourcePath: "/tradings" } => new ShowAvailableTradesCommand(_tradeManager, GetIdentity(request)), 
                     { Method: HttpMethod.Post, ResourcePath: "/tradings" } => new CreateTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), Deserialize<Trade>(request.Payload)), 
                     { Method: HttpMethod.Delete, ResourcePath: var path } when isTrade(path) => new DeleteTradingDealCommand(_tradeManager, _cardManager, GetIdentity(request), GetParameterFromRequest(path)), 
                     { Method: HttpMethod.Post, ResourcePath: var path } when isTrade(path) => new ProcessTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), GetParameterFromRequest(path), DeserializeString(request.Payload)),
 
                     _ => null
-                };
+                };;
             }
             catch(InvalidDataException)
             {

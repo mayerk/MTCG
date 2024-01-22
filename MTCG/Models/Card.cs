@@ -9,7 +9,7 @@ namespace MTCG.Models {
     public class Card {
         public string Id { get; set; }
         public string Name { get; set; } = "";
-        public double Damage { get; } = 0;
+        public double Damage { get; set; } = 0;
         [JsonIgnore]
         public string UId { get; set; } = "";
         [JsonIgnore]

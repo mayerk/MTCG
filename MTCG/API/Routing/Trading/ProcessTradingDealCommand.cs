@@ -62,7 +62,7 @@ namespace MTCG.API.Routing.Trading
         }
 
         private bool meetsRequirements(Card cardInTradeDeal, Card offeredCard, Trade trade) {
-            return (cardInTradeDeal.CardSpecification.cardType == offeredCard.CardSpecification.cardType) && offeredCard.Damage >= trade.MinimumDamage;
+            return (cardInTradeDeal.CardSpecification.CardType == offeredCard.CardSpecification.CardType) && offeredCard.Damage >= trade.MinimumDamage;
         }
     }
 }

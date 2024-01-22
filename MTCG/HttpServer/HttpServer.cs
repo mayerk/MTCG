@@ -32,7 +32,8 @@ namespace MTCG.HttpServer
             {
                 var client = _listener.AcceptTcpClient();
                 var clientHandler = new HttpClientHandler(client);
-                HandleClient(clientHandler);
+                Task.Run(() => HandleClient(clientHandler));
+                //HandleClient(clientHandler);
             }
         }
 

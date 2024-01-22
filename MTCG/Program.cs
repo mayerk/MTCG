@@ -25,8 +25,9 @@ namespace MTCG
             IPackageManager packageManager = new PackageManager(packageDao);
             IDeckManager deckManager = new DeckManager(deckDao);
             ITradeManager tradeManager = new TradeManager(tradeDao);
+            IGameManager gameManager = new GameManager();
 
-            var router = new MTCGRouter(userManager, cardManager, packageManager, deckManager, tradeManager);
+            var router = new MTCGRouter(userManager, cardManager, packageManager, deckManager, tradeManager, gameManager);
             var server = new HttpServer.HttpServer(router, IPAddress.Any, 10001);
             server.Start();            
         }
