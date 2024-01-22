@@ -1,5 +1,4 @@
-﻿using MTCG.BLL;
-using MTCG.BLL.Exceptions;
+﻿using MTCG.BLL.Exceptions;
 using MTCG.BLL.Managers;
 using MTCG.Enums;
 using MTCG.HttpServer.Response;
@@ -11,7 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTCG.API.Routing {
+namespace MTCG.API.Routing
+{
     public class ProcessBattleCommand: AuthenticatedRouteCommand {
 
         private readonly IUserManager _userManager;

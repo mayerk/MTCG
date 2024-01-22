@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTCG.BLL.Managers {
+namespace MTCG.BLL.Managers
+{
     public class GameManager: IGameManager {
 
         public GameManager() {}
