@@ -23,7 +23,16 @@ namespace MTCG.API.Routing.Users
             foreach(User user in users) {
                 stats.Add(new(user.UserData.Displayname, user.Elo, user.Wins, user.Losses));
             }
-            HttpResponse response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(stats));
+            string scoreboard = "";
+            if (stats.Count > 0) {
+                int i = 1;
+                foreach (var stat in stats) {
+                    scoreboard += i.ToString() + ") " + stat.Name + " - Elo: " + stat.Elo.ToString() + " - Wins: " + stat.Wins.ToString() + " - Losses: " + stat.Losses.ToString() + "\n";
+                    ++i;
+                }
+            }
+            
+            HttpResponse response = new HttpResponse(StatusCode.Ok, scoreboard);
             return response;
         }
     }

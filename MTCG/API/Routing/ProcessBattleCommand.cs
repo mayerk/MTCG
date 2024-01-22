@@ -72,9 +72,9 @@ namespace MTCG.API.Routing {
                             _cardManager.UpdateCardUId(card);
                         }
 
-                        result.Winner.Elo += 20;
+                        result.Winner.Elo += 3;
                         result.Winner.Wins += 1;
-                        result.Looser.Elo = (result.Looser.Elo - 10 <= 0) ? 0 : result.Looser.Elo - 10;
+                        result.Looser.Elo = (result.Looser.Elo - 5 <= 0) ? 0 : result.Looser.Elo - 5;
                         result.Looser.Losses += 1;
 
                         _userManager.UpdateUser(result.Winner);
