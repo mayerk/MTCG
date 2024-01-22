@@ -43,12 +43,12 @@ namespace MTCG.Models {
             }
             switch(str) {
                 case "Goblin": type = MonsterType.GOBLIN; break;
-                case "Dragon": type = MonsterType.DRAGON; break;
+                case "Dragon": type = MonsterType.DRAGON; ElementType = ElementType.FIRE; break;
                 case "Wizzard": type = MonsterType.WIZZARD; break;
                 case "Ork": type = MonsterType.ORK; break;
                 case "Knight": type = MonsterType.KNIGHT; break;
-                case "Kraken": type = MonsterType.KRAKEN; break;
-                case "FireElve": type = MonsterType.FIREELVE; break;
+                case "Kraken": type = MonsterType.KRAKEN; ElementType = ElementType.WATER; break;
+                case "FireElve": type = MonsterType.FIREELVE; ElementType = ElementType.FIRE; break;
                 case "Troll": type = MonsterType.TROLL; break;
                 default: type = MonsterType.NONE; break;
             }

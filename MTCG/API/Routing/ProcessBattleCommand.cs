@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace MTCG.API.Routing {
     public class ProcessBattleCommand: AuthenticatedRouteCommand {
 
+        private readonly IUserManager _userManager;
         private readonly ICardManager _cardManager;
         private readonly IDeckManager _deckManager;
         private readonly IGameManager _gameManager;
@@ -25,7 +26,8 @@ namespace MTCG.API.Routing {
 
         private static readonly object _lockObject = new();
 
-        public ProcessBattleCommand(ICardManager cardManager, IDeckManager deckManager, IGameManager gameManager, User identity): base(identity) {
+        public ProcessBattleCommand(IUserManager userManager, ICardManager cardManager, IDeckManager deckManager, IGameManager gameManager, User identity): base(identity) {
+            _userManager = userManager;
             _cardManager = cardManager;
             _deckManager = deckManager;
             _gameManager = gameManager;
@@ -43,6 +45,7 @@ namespace MTCG.API.Routing {
                             if(player1 != null && player2 != null) {
                                 _gameResult = _gameManager.Start(player1, player2);
                                 _results.TryAdd((player1.Id == Identity.Id) ? player2.Id : player1.Id, _gameResult);
+
                                 HttpResponse response = new HttpResponse(StatusCode.Ok, _gameResult.Log);
                                 return response;
                             }
@@ -53,6 +56,30 @@ namespace MTCG.API.Routing {
                 }
                 if(_results.TryGetValue(Identity.Id, out var result)) {
                     _results.TryRemove(Identity.Id, out result);
+                    if(result?.Looser != null && result?.Winner != null) {
+                        List<Deck> decks = _deckManager.GetDeckByUId(result.Looser.Id);
+                        List<Card> cards = new List<Card>();
+                        foreach(var deck in decks) {
+                            Card? card = _cardManager.GetCardById(deck.CId);
+                            if(card == null) {
+                                throw new CardNotFoundException();
+                            }
+                            cards.Add(card);
+                        }
+                        _deckManager.DeleteDeckByUId(result.Looser.Id);
+                        foreach(var card in cards) {
+                            card.UId = result.Winner.Id;
+                            _cardManager.UpdateCardUId(card);
+                        }
+
+                        result.Winner.Elo += 20;
+                        result.Winner.Wins += 1;
+                        result.Looser.Elo = (result.Looser.Elo - 10 <= 0) ? 0 : result.Looser.Elo - 10;
+                        result.Looser.Losses += 1;
+
+                        _userManager.UpdateUser(result.Winner);
+                        _userManager.UpdateUser(result.Looser);
+                    }
                     HttpResponse response = new HttpResponse(StatusCode.Ok, result?.Log);
                     return response;
                 }

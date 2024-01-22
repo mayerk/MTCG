@@ -9,6 +9,7 @@ using MTCG.API.Routing.Cards;
 using MTCG.API.Routing.Packages;
 using MTCG.API.Routing.Trading;
 using MTCG.BLL.Managers;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MTCG.API.Routing
 {
@@ -39,6 +40,7 @@ namespace MTCG.API.Routing
         {
             var isMatch = (string path) => _routeParser.IsMatch(path, "/users/{id}");
             var isTrade = (string path) => _routeParser.isTrade(path, "/tradings/{tradingdealid}");
+            var showDeck = (string path) => _routeParser.isShowDeck(path);
 
             try
             {
@@ -56,14 +58,14 @@ namespace MTCG.API.Routing
                     
                     { Method: HttpMethod.Get, ResourcePath: "/cards" } => new ShowUserCardsCommand(_cardManager, GetIdentity(request)),
                     
-                    { Method: HttpMethod.Get, ResourcePath: "/deck" } => new ShowDeckCommand(_cardManager, _deckManager, GetIdentity(request)),
+                    { Method: HttpMethod.Get, ResourcePath: var path } when showDeck(path) => new ShowDeckCommand(_cardManager, _deckManager, GetIdentity(request), PlainFormat(path)),
                     { Method: HttpMethod.Put, ResourcePath: "/deck" } => new ConfigureDeckCommand(_cardManager, _deckManager, DeserializeIDs(request.Payload), GetIdentity(request)), 
                     
                     { Method: HttpMethod.Get, ResourcePath: "/stats" } => new ShowUsersStatsCommand(_userManager, GetIdentity(request)), 
                     
                     { Method: HttpMethod.Get, ResourcePath: "/scoreboard" } => new ShowScoreboardCommand(_userManager, GetIdentity(request)), 
                     
-                    { Method: HttpMethod.Post, ResourcePath: "/battles" } => new ProcessBattleCommand(_cardManager, _deckManager, _gameManager, GetIdentity(request)),
+                    { Method: HttpMethod.Post, ResourcePath: "/battles" } => new ProcessBattleCommand(_userManager, _cardManager, _deckManager, _gameManager, GetIdentity(request)),
                     
                     { Method: HttpMethod.Get, ResourcePath: "/tradings" } => new ShowAvailableTradesCommand(_tradeManager, GetIdentity(request)), 
                     { Method: HttpMethod.Post, ResourcePath: "/tradings" } => new CreateTradingDealCommand(_tradeManager, _cardManager, _deckManager, GetIdentity(request), Deserialize<Trade>(request.Payload)), 
@@ -106,6 +108,11 @@ namespace MTCG.API.Routing
 
         private string GetParameterFromRequest(string path) {
             return path.Substring(path.LastIndexOf("/") + 1);
+        }
+
+        private bool PlainFormat(string path) {
+            string format = path.Substring(path.LastIndexOf("?") + 1);
+            return (format == "format=plain") ? true : false;
         }
     }
 }

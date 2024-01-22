@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MTCG.BLL.Exceptions;
 using MTCG.BLL.Managers;
 using MTCG.HttpServer.Response;
 using MTCG.Models;
@@ -14,9 +15,12 @@ namespace MTCG.API.Routing.Users
         private readonly ICardManager _cardManager;
         private readonly IDeckManager _deckManager;
 
-        public ShowDeckCommand(ICardManager cardManager, IDeckManager deckManager, User identity): base(identity) {
+        private readonly bool _plain;
+
+        public ShowDeckCommand(ICardManager cardManager, IDeckManager deckManager, User identity, bool plain): base(identity) {
             _cardManager = cardManager;
             _deckManager = deckManager;
+            _plain = plain;
         }
 
         public override HttpResponse Execute() {
@@ -29,10 +33,22 @@ namespace MTCG.API.Routing.Users
                 return response;
             }
             foreach(var obj in deck) {
-                cards.Add(_cardManager.GetCardById(obj.CId));
+                Card? card = _cardManager.GetCardById(obj.CId);
+                if(card == null) {
+                    throw new CardNotFoundException();
+                }
+                cards.Add(card);
             }
-            response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(cards));
-
+            if(_plain) {
+                string str = "Deck of " + Identity.UserData.Displayname + "\n";
+                foreach(var card in cards) {
+                    str += "* " + card.Name + " - " + card.Damage + " - " + card.Id + "\n";
+                }
+                response = new HttpResponse(StatusCode.Ok, str);
+            } else {
+                response = new HttpResponse(StatusCode.Ok, JsonConvert.SerializeObject(cards));
+            }
+           
             return response;
         }
     }

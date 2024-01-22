@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MTCG.BLL.Exceptions;
 using MTCG.DAL;
 using MTCG.Models;
 
@@ -30,6 +31,12 @@ namespace MTCG.BLL.Managers
         public Deck GetDeckByCId(string cid)
         {
             return _deckDao.GetDeckByCId(cid);
+        }
+
+        public void DeleteDeckByUId(string uid) {
+            if(_deckDao.DeleteDeckByUId(uid) == false) {
+                throw new DeckNotFoundException();
+            }
         }
     }
 }

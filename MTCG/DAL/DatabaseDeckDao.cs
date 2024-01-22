@@ -17,6 +17,7 @@ namespace MTCG.DAL {
         private readonly string GetDeckByUIdCommand = @"SELECT * from decks WHERE uid=@uid;";
         private readonly string GetDeckByCIdCommand = @"SELECT * from decks WHERE cid=@cid;";
         private readonly string InsertDeckCommand = @"INSERT INTO decks (id, uid, cid) VALUES (@id, @uid, @cid);";
+        private readonly string DeleteDeckByUIdCommand = @"DELETE from decks WHERE uid=@uid;";
 
 
         public DatabaseDeckDao(string connectionString) {
@@ -75,6 +76,16 @@ namespace MTCG.DAL {
                 deck = ReadDeck(reader);
             }
             return deck;
+        }
+
+        public bool DeleteDeckByUId(string uid) {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(DeleteDeckByUIdCommand, connection);
+            cmd.Parameters.AddWithValue("uid", uid);
+            var affectedRows = cmd.ExecuteNonQuery();
+
+            return affectedRows > 0;
         }
 
         private Deck ReadDeck(IDataRecord record) {

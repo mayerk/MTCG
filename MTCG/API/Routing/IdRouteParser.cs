@@ -24,6 +24,10 @@ namespace MTCG.API.Routing
             return Regex.IsMatch(resourcePath, pattern);
         }
 
+        public bool isShowDeck(string path) {
+            return (path == "/deck" || path == "/deck?format=plain") ? true : false;
+        }
+
         public Dictionary<string, string> ParseParameters(string resourcePath, string routePattern)
         {
             // query parameters
